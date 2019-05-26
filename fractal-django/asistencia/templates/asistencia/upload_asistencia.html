@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Subir asistencias{% endblock %}
+
+{%block content %}
+<div style="margin-top: 100px;">
+  <h2>Asistencias</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enviar</button>
+    <br>
+    {{ error_msg }}
+  </form>
+</div>
+{% endblock %}

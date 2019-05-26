@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3>Grado: {{ class_info.grado }} </h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Secci&oacute;n: {{ class_info.seccion }} </h3>
+  </div>
+</div>
+<form method="GET" class="form-inline" style="margin-bottom: 20px">
+  <div class="row">
+    <div class="col-md-4">
+      <label for="bimonth-select">Bimestre:</label>
+    </div>
+    <div class="col-md-8">
+      <select class="form-control" name="bimonth" id="bimonth-select">
+        <option {% if request.bimonth == 1 %} selected="true" {% endif %} value="1">1</option>
+        <option {% if request.bimonth == 2 %} selected="true" {% endif %} value="2">2</option>
+        <option {% if request.bimonth == 3 %} selected="true" {% endif %} value="3">3</option>
+        <option {% if request.bimonth == 4 %} selected="true" {% endif %} value="4">4</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="student-select">Estudiante:</label>
+    </div>
+    <div class="col-md-8">
+      <select class="form-control" name="student_id" id="student-select">
+      {% for student in students %}
+        <option {% if student.is_selected %} selected="true" {% endif %} value="{{student.student_id}}">{{student.student_name}}</option>
+      {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <input type="submit" value="Ver">
+    </div>
+  </div>
+</form>
+  <div class="row" style="padding:10px">
+    <form action="{% url 'download_libretas' %}" method="GET">
+      {% for student in students %}
+        {% if student.is_selected %}
+        <!--form action="/asistencias/libretas/{{student.student_id}}" method="GET"-->
+      <input type="hidden" name="student_id" value="{{student.student_id}}">
+        {% endif %}
+      {% endfor %}
+      <input type="submit" value="Descargar libreta">
+    </form>
+  </div>
+  <!--div class="w-100"></div>
+  <div class="row" style="padding:10px">
+    <form action="{% url 'download_libretas' %}" method="GET">
+    <form action="/asistencias/libretas/-1" method="GET">
+      <input type="hidden" name="student_id" value="-1">
+      <input type="submit" value="Descargar todas las libretas">
+    </form>
+  </div-->

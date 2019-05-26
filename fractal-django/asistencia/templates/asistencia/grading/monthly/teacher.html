@@ -1,0 +1,42 @@
+<div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+<ul class="nav nav-tabs" id="tab_subject_list" role="tablist">
+{% for c in grades %}
+  <li class="nav-item">
+    <a class="nav-link {% if active == c.subject_id %} active{% endif %}" id="{{ c.subject_name }}-tab" data-toggle="tab" href="#{{ c.subject_name }}" role="tab" aria-controls="{{ c.subject_name }}">{{ c.subject_name }}</a>
+  </li>
+{% endfor %}
+</ul>
+
+<div class="tab-content" id="tab_content_subject_list">
+{% for c in grades %}
+<div class="tab-pane {% if active == c.subject_id %} show active{% endif %}" id="{{ c.subject_name }}" role="tabpanel" aria-labelledby="{{ c.subject_name }}-tab">
+  <form method="post">
+  <input type="hidden" value="{{ c.subject_id }}" name="subject">
+  <input type="hidden" value="{{ c.period }}" name="period">
+  {% csrf_token %}
+  <h4> Notas mensuales de {{ c.subject_name }} para el periodo {{ request.period }}</h4>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th> Nombres y Apellidos </th>
+        <th> Examen </th>
+        <th> Cuaderno </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in c.student %}
+      <tr>
+        <td> {{ s.name }} </td>
+        <td> <input type="text" value="{{ s.examen }}" name="e{{ s.student_id }}"> </td>
+        <td> <input type="text" value="{{ s.cuaderno }}" name="c{{ s.student_id }}"> </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="submit" value="Guardar">
+  </form>
+</div>
+{% endfor %}
+</div>
+</div>

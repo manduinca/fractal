@@ -1,0 +1,18 @@
+<div class="row">
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th> Curso </th>
+        <th> Promedio Bimestral </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for grade in grades %}
+      <tr>
+        <td> {{ grade.subject_name }} </td>
+        <td> {{ grade.pb }} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Notas Semanales{% endblock %}
+{% block content %}
+
+{% if request.is_teacher  %}
+<div class="grid">
+  {% include 'asistencia/grading/weekly/title.html' %}
+  {% include 'asistencia/grading/weekly/teacher.html' %}
+</div>
+{% elif request.is_student %}
+  {% include 'asistencia/grading/weekly/student.html' %}
+{% endif %}
+
+{% endblock %}

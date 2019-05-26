@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Notas{% endblock %}
+{% block content %}
+
+{% if request.is_teacher  %}
+<div class="grid">
+  {% include 'asistencia/grading/daily/title.html' %}
+  {% if request.is_allowed_day %}
+    {% include 'asistencia/grading/daily/teacher.html' %}
+  {% else %}
+    {% include 'asistencia/grading/daily/not_allowed.html' %}
+  {% endif %}
+  <script>
+  $(function(){
+    $('#req-date').datepicker({
+      format: "yyyy-mm-dd",
+      language: "es"
+    });
+  });
+  </script>
+</div>
+{% elif request.is_student %}
+{% include 'asistencia/grading/daily/student.html' %}
+{% endif %}
+
+{% endblock %}

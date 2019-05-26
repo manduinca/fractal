@@ -1,0 +1,21 @@
+Crear anho academico!
+Crear los grados y sus secciones
+Crear los cursos
+Luego los profesores, 
+y asignarlos a sus secciones respectivas (tutores)
+
+Crear estudiantes
+Crear la matricula!
+
+Cuentas de prueba:
+123456abc para profesor1, apoderado1 y admin
+
+
+Pendientes
+==========
+
+Cuando el periodo se actualiza (POST), el select deberia seleccionar el actual
+Cuando la fecha/periodo se selecciona/actualiza(POST), deberia abrir un tab automaticamente (eg matematica)
+mezclar logicas entre fecha y periodo? para notas mensuales y diarias? creo que no: pese a que hay codigo repetido, la logica es mas simple  si se necesitan hacer cambios individuales; no asi si son cambios globales
+should use a widget instead of weird logic in grading_monthly_title
+

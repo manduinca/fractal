@@ -1,0 +1,5 @@
+Django==1.11.10
+gunicorn==19.3.0
+django-extensions==2.1.6
+psycopg2==2.8.2
+reportlab==3.5.21

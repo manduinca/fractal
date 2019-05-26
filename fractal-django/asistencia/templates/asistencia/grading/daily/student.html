@@ -1,0 +1,76 @@
+<div class="grid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3> Tutor: {{ teacher.name }} </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Grado: {{ teacher.grado }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Secci&oacute;n: {{ teacher.seccion }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <h4>Fecha:</h4>
+    </div>
+    <form method="GET" class="form-inline">
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="req-date" name="date" value="{{ request.date }}">
+      </div>
+      <div class="col-md-2">
+        <input type="submit" value="Ver">
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+    <!-- TODO put multiple students in tabs -->
+{% for s in grades %}
+<div>
+  <h3>Notas de {{ s.student_name }}</h3>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th> Curso </th>
+        {% if request.has_homeworks %}
+        <th> Nota tarea </th>
+        {% endif %}
+        {% if request.has_dailyeval_grade %}
+        <th> Nota evaluaci&oacute;n </th>
+        {% endif %}
+        <th> Fecha </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in s.grades %}
+      <tr>
+        <td>{{ g.subject_name }}</td>
+        {% if request.has_homeworks %}
+        <td>{{ g.nota1 }}</td>
+        {% endif %}
+        {% if request.has_dailyeval_grade %}
+        <td>{{ g.nota2 }}</td>
+        {% endif %}
+        <td>{{ g.date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+  </div>
+</div>
+
+<script>
+$(function(){
+  $('#req-date').datepicker({
+    format: "yyyy-mm-dd",
+    language: "es"
+  });
+});
+</script>

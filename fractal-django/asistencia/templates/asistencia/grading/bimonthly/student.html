@@ -1,0 +1,66 @@
+<div class="grid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3> Tutor: {{ teacher.name }} </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Grado: {{ teacher.grado }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Secci&oacute;n: {{ teacher.seccion }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <form method="GET" class="form-inline">
+      <div class="col-md-2">
+        <label for="bimonth-select">Bimestre:</label>
+      </div>
+      <div class="col-md-8">
+        <select class="form-control" name="bimonth" id="bimonth-select">
+          <option {% if request.bimonth == 1 %} selected="true" {% endif %}>1</option>
+          <option {% if request.bimonth == 2 %} selected="true" {% endif %}>2</option>
+          <option {% if request.bimonth == 3 %} selected="true" {% endif %}>3</option>
+          <option {% if request.bimonth == 4 %} selected="true" {% endif %}>4</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="submit" value="Ver">
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+    <!-- TODO put multiple students in tabs -->
+{% for s in grades %}
+<div>
+  <h3>Promedios Bimestrales {{ s.student_name }}</h3>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th> Curso </th>
+        <th> Promedio mes 1 </th>
+        <th> Promedio mes 2 </th>
+        <th> <b> Promedio Bimestral </b> </th>
+        <th> Bimestre </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in s.grades %}
+      <tr>
+        <td>{{ g.subject_name }}</td>
+        <td>{{ g.pm1 }}</td>
+        <td>{{ g.pm2 }}</td>
+        <td><b>{{ g.pb }}</b></td>
+        <td>{{ g.bimonth }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+  </div>
+</div>

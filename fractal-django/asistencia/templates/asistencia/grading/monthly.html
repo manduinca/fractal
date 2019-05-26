@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Notas Mensual{% endblock %}
+{% block content %}
+
+{% if request.is_teacher  %}
+<div class="grid">
+  {% include 'asistencia/grading/monthly/title.html' %}
+  {% include 'asistencia/grading/monthly/teacher.html' %}
+</div>
+{% elif request.is_student %}
+  {% include 'asistencia/grading/monthly/student.html' %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,74 @@
+<div class="grid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3> Tutor: {{ teacher.name }} </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Grado: {{ teacher.grado }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Secci&oacute;n: {{ teacher.seccion }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <form method="GET" class="form-inline">
+      <div class="col-md-2">
+        <label for="period-select">Periodo:</label>
+      </div>
+      <div class="col-md-8">
+        <select class="form-control" name="period" id="period-select">
+          <option {% if request.period == 1 %} selected="true" {% endif %}>1</option>
+          <option {% if request.period == 2 %} selected="true" {% endif %}>2</option>
+          <option {% if request.period == 3 %} selected="true" {% endif %}>3</option>
+          <option {% if request.period == 4 %} selected="true" {% endif %}>4</option>
+          <option {% if request.period == 5 %} selected="true" {% endif %}>5</option>
+          <option {% if request.period == 6 %} selected="true" {% endif %}>6</option>
+          <option {% if request.period == 7 %} selected="true" {% endif %}>7</option>
+          <option {% if request.period == 8 %} selected="true" {% endif %}>8</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="submit" value="Ver">
+      </div>
+    </form>
+  </div>
+  <div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+    <!-- TODO put multiple students in tabs -->
+{% for s in grades %}
+<div>
+  <h3>Notas de {{ s.student_name }}</h3>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th> Curso </th>
+        <th> Promedio Tareas </th>
+        <th> Promedio Evaluaciones </th>
+        <th> Examen mensual </th>
+        <th> Nota de Cuaderno </th>
+        <th> <b> Promedio Mensual </b> </th>
+        <th> Periodo </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in s.grades %}
+      <tr>
+        <td>{{ g.subject_name }}</td>
+        <td>{{ g.pt }}</td>
+        <td>{{ g.pe }}</td>
+        <td>{{ g.em }}</td>
+        <td>{{ g.nc }}</td>
+        <td><b>{{ g.pm }}</b></td>
+        <td>{{ g.period }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+  </div>
+</div>

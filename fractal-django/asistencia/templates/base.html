@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/locale-all.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
+<!--link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script-->
+</head>
+
+<body>
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom:20px">
+  <a class="navbar-brand" href="#">Fractal</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-between">
+      {% if request.is_student %}
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'asistencias_list' %}">Asistencias</a>
+        <!--a class="nav-link" href="#">Asistencias <span class="sr-only">(current)</span></a-->
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'asistencias_schedule' %}">Horarios</a>
+      </li>
+      {% if request.has_daily_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_daily' %}">Notas Diarias</a>
+      </li>
+      {% endif %}
+      {% if request.has_weekly_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_weekly' %}">Notas Semanales</a>
+      </li>
+      {% endif %}
+      {% if request.has_monthly_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_monthly' %}">Promedios Mensuales</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_bimonthly' %}">Libreta</a>
+      </li>
+      {% endif %}
+      {% elif request.is_teacher %}
+      {% if request.has_daily_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_daily' %}">Notas Diarias</a>
+      </li>
+      {% endif %}
+      {% if request.has_weekly_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_weekly' %}">Notas Semanales</a>
+      </li>
+      {% endif %}
+      {% if request.has_monthly_grades %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_monthly' %}">Notas mensuales</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_bimonthly' %}">Libreta</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'grading_reports' %}">Reportes</a>
+      </li>
+      {% endif %}
+      {% endif %}
+      <!--li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dropdown
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link disabled" href="#">Disabled</a>
+      </li-->
+
+    </ul>
+    <!--form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form-->
+  </div>
+  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        {% if not request.is_admin %}
+        <a class="nav-link">{{ request.user_name }}</a> 
+        {% else %}
+        <a class="nav-link">Administrador</a>
+        {% endif %}
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'asistencias_logout' %}">Salir</a><i class="sign-out"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+{% endblock %}
+
+<!--div style="margin-top:100px; margin-left: auto; margin-right: auto; width: 420px"-->
+<div class="container">
+<div class="row col-md-8 offset-md-2">
+{% block content %}
+{% endblock %}
+</div>
+</div>
+<!--/div-->
+
+</body>
+</html>

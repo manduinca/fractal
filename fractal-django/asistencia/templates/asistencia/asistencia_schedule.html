@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<table id="schedule" class="table display" style="width:100%; border-collapse: collapse; ">
+  <thead class="thead-dark">
+    <tr id="table-title">
+      <th>Hora</th>
+      <th>Lunes</th>
+      <th>Martes</th>
+      <th>Miercoles</th>
+      <th>Jueves</th>
+      <th>Viernes</th>
+      {% if request.is_saturday_allowed %}<th>Sabado</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody id="schedule-table-body">
+    {% for row in schedule %}
+      {% if row.1 == "rowspan" %} 
+      <tr class='table-success'><td>{{ row.0 }}</td><td colspan='{{ num_cols }}'>{{ row.2 }}</td></tr>
+      {% else %}
+        <tr>
+        {% for val in row %}
+          <th> {{val}} </th>
+        {% endfor %}
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+<style>
+table, td, th {
+  border: 1px solid black;
+  text-align:center;
+  vertical-align: center;
+}
+</style>
+<script>
+var rColor = "#ff9f89"
+var gColor = "#7CFC00"
+var yColor = "#FBF53C" //251, 214, 10
+/*$(document).ready(function() {
+  $(".red").css({"background-color":rColor});
+  $(".green").css({"background-color":gColor});
+  $(".yellow").css({"background-color":yColor});
+  var grado = "{{ grado }}";
+  var seccion = "{{ seccion }}";
+  var cursos = {{ schedule|safe }};
+
+  //if ( grado<=5 ) {
+    var preDay = "<tr><td>07:45 - 08:00</td>";
+    for ( var k=0; k<5; k++ ) 
+      preDay += "<td>Formacion</td>";
+    preDay += "</tr>";
+    $('#schedule-table-body').append(preDay);
+  //}
+
+  //if ( grado>5 ) {
+  //  $('#table-title').append("<th>Sabado</th>");
+  //}
+
+  var i=0;
+  for ( let hour of cursos ){
+    var html_code = "";
+    if ( i == 2 && grado<=5 ) 
+      html_code+="<tr class='table-success'><td>10:00 - 10:15</td><td colspan='5'>Recreo</td></tr>";
+    if ( i == 4 && grado<=5 ) 
+      html_code+="<tr class='table-success'><td>12:15 - 12:35</td><td colspan='5'>Recreo</td></tr>";
+    html_code += "<tr>";
+    for ( let day of hour ) {
+      html_code += "<td>" + day + "</td>";
+    }
+    html_code += "</tr>";
+    i++;
+    $('#schedule-table-body').append(html_code);
+  }
+
+  if ( grado<=5 ) {
+    var posDay = "<tr><td>02:35 - 02:45</td>";
+    for ( var k=0; k<5; k++ ) 
+      posDay += "<td>Entr. Cuad.</td>";
+    posDay += "</tr>";
+    $('#schedule-table-body').append(posDay);
+  }
+});*/
+</script>
+<style>
+/*body {
+margin: 40px 10px;
+padding: 0;
+font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+font-size: 14px;
+}*/
+
+#calendar {
+  max-width: 900px;
+  margin: 0 auto;
+}
+table {
+  position: relative;
+  left: -110px;
+}
+th {
+  min-width: 8em;
+}
+
+</style>
+{% endblock %}
+

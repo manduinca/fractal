@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3>Grado: {{ teacher.grado }} </h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Secci&oacute;n: {{ teacher.seccion }} </h3>
+  </div>
+</div>
+<div class="row">
+  <form method="GET" class="form-inline" style="margin-bottom: 20px">
+    <div class="col-md-2">
+      <label for="period-select">Periodo:</label>
+    </div>
+    <div class="col-md-8">
+      <select class="form-control" name="period" id="period-select">
+        {% for period in request.periods %}
+        <option {% if request.period == forloop.counter %} selected="true" {% endif %} value="{{forloop.counter}}">{{forloop.counter}} ({{period.start}} -- {{period.end}})</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <input type="submit" value="Ver">
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,70 @@
+DevOps (operaciones)
+1. Install HTTPS certificate
+4. Setup VPN
+5. Add the code into a git repo
+6. Add a monitor to the app
+
+Development
+2. Refactor logic.py
+3. Refactor views.py
+6. Fix frontend for all the views where any tab is selected at all when loading the page, and then when updating the just updated tab should be shown
+7. 4to secundaria: if they don't have homeworks, the column shouldn't even appear on monthly grades
+8. Properly use logger
+
+
+2. Solo notas del dia para los padres, que no se muestren los que no tienen nota, para los apoderados
+   semanal tampoco que se muestre nada. OK
+Obs
+===
+1. para seleccion, el promedio mensual sería solo el promedio de las evaluaciones diarias, y el bimestral el promedio de los 2 meses. 
+2. mostrar merito por simulacro
+3. don't consider tutoria for reporte aprobados
+4. Verify schedule for seleccion. Should work, must verify!
+5. promedios mensual: dos casos: 18 y 19 debe ser 19 el promedio; 20, 20, 20 y 14 promdedio debe ser 19 para algunas notas
+6. simulacros: las notas no se estan guardando
+
+matricula: repetitivo, password
+si no figura el nombre del apoderado, se pone del padre, sino de la madre
+
+escribir el password
+Mejoras:
+1. La libreta de notas:  promedio de matematicas, 
+Ciencias sociales: 
+historia universal
+historia del peru
+geografia
+
+3. reporte de fin de anho segun lo enviado
+
+5. agregar pagos de las mensualidades, grado, fecha, nro de recibo, monto pagado, matricula 300
+ . no han pagado hasta la quincena, sale un mensaje
+ . no han pagado hasta despues de un mes, que no vea notas
+
+
+Luis tasks
+==========
+
+Protocolos comunes:
+HTTP: web
+HTTPS: web encriptado
+SSH: conexion remota a servidores
+politica de seguridad: rechazar todas las conexiones que no sean del puerto 80 (HTTP) y del puerto 443(HTTPS)
+knock: 5 23 61 => disponiliza conexiones por el puerto 22 (SSH) durante 30 segundos, luego lo vuelve a cerrar
+ssh: con contrasena o con key (llave)
+
+DevOps:
+1. Setup firewall, knock port and ssh only with key. Follow this: 
+https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-1804
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-iptables-on-ubuntu-14-04
+https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+https://www.digitalocean.com/community/tutorials/how-to-use-port-knocking-to-hide-your-ssh-daemon-from-attackers-on-ubuntu
+https://wiki.archlinux.org/index.php/SSH_keys
+2. make deployment script: (aca se necesitan llaves)
+Only deploy if the tests are ok!
+3. Make script for DB backup, should include the line for cronjobs!
+naming with date: %Y%M%D%H%M should log an error if something goes wrong!
+
+Development:
+1. Fix middleware.py when there's no YearSetting set
+2. Set date, period, week, bimonth and year to current if none is set
+3. Make tests

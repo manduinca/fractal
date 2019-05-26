@@ -1,0 +1,51 @@
+<div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+<ul class="nav nav-tabs" id="tab_subject_list" role="tablist">
+{% for c in grades %}
+  <li class="nav-item">
+    <a class="nav-link" id="{{ c.subject_name }}-tab" data-toggle="tab" href="#{{ c.subject_name }}" role="tab" aria-controls="{{ c.subject_name }}">{{ c.subject_name }}</a>
+  </li>
+{% endfor %}
+</ul>
+</div>
+<div class="row">
+<div class="tab-content" id="tab_content_subject_list">
+{% for c in grades %}
+<div class="tab-pane" id="{{ c.subject_name }}" role="tabpanel" aria-labelledby="{{ c.subject_name }}-tab">
+  <form method="post">
+  <input type="hidden" value="{{ c.subject_id }}" name="subject">
+  <input type="hidden" value="{{ c.date }}" name="date">
+  {% csrf_token %}
+  <h4> Notas de {{ c.subject_name }} para la fecha {{ request.date }}</h4>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th> Nombres y Apellidos </th>
+        {% if request.has_homeworks %}
+        <th> Nota tarea </th>
+        {% endif %}
+        {% if request.has_dailyeval_grade %}
+        <th> Nota evaluaci&oacute;n </th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in c.student %}
+      <tr>
+        <td> {{ s.name }} </td>
+        {% if request.has_homeworks %}
+        <td> <input type="text" value="{{ s.tarea }}" name="t{{ s.student_id }}"> </td>
+        {% endif %}
+        {% if request.has_dailyeval_grade %}
+        <td> <input type="text" value="{{ s.evaluacion }}" name="e{{ s.student_id }}"> </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="submit" value="Guardar">
+  </form>
+</div>
+{% endfor %}
+</div>
+</div>

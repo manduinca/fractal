@@ -1,0 +1,65 @@
+<div class="grid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3> Tutor: {{ teacher.name }} </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Grado: {{ teacher.grado }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h4> Secci&oacute;n: {{ teacher.seccion }} </h4>
+    </div>
+  </div>
+  <div class="row">
+    <!--form method="GET" class="form-inline">
+      <div class="col-md-2">
+        <label for="week-select">Semana:</label>
+      </div>
+      <div class="col-md-8">
+        <select class="form-control" name="week" id="week-select">
+        {% for week in request.weeks %}
+        <option {% if request.week == forloop.counter %} selected="true" {% endif %} value="{{forloop.counter}}">Semana {{forloop.counter}} ({{week.start}} -- {{week.end}})</option>
+        {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="submit" value="Ver">
+      </div>
+    </form-->
+  </div>
+  <div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+    <!-- TODO put multiple students in tabs -->
+{% for s in grades %}
+<div>
+  <h3>Simulacros de {{ s.student_name }}</h3>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <!--th> Curso </th-->
+        {% if request.has_weekly_grades %}
+        <th> Nota Simulacro </th>
+        {% endif %}
+        <th> Semana </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in s.grades %}
+      <tr>
+        <!--td>{{ g.subject_name }}</td-->
+        {% if request.has_weekly_grades %}
+        <th> {{ g.simulacro }} </th>
+        {% endif %}
+        <td>{{ g.week }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+  </div>
+</div>

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Reporte de aprobados y Orden de M&acute;rito{% endblock %}
+{% block content %}
+
+{% if request.is_teacher  %}
+<div class="grid">
+  <div class="row">
+    <h3> Reporte de Aprobados y M&eacute;rito General</h3>
+  </div>
+  <div class="row">
+    <h3>Grado: {{ class_info.grado }} </h3>
+  </div>
+  <div class="row">
+    <h3>Secci&oacute;n: {{ class_info.seccion }} </h3>
+  </div>
+  <div class="row">
+    <form method="GET" class="form-inline" style="margin-bottom: 20px">
+      <div class="col-md-2">
+        <label for="period-select">Periodo:</label>
+      </div>
+      <div class="col-md-8">
+        <select class="form-control" name="period" id="period-select">
+          {% for period in request.periods %}
+          <option {% if request.period == forloop.counter %} selected="true" {% endif %} value="{{forloop.counter}}">{{forloop.counter}} ({{period.start}} -- {{period.end}})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input type="submit" value="Ver">
+      </div>
+    </form>
+  </div>
+
+<div class="row">
+    <!-- https://getbootstrap.com/docs/4.0/components/navs/ -->
+  <ul class="nav nav-tabs" id="tab_subject_list" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="aprobados-tab" data-toggle="tab" href="#aprobados" role="tab" aria-controls="aprobados">Aprobados</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="merito-tab" data-toggle="tab" href="#merito" role="tab" aria-controls="merito">M&eacute;rito General</a>
+    </li>
+  </ul>
+</div>
+<div class="row">
+  <div class="tab-content" id="tab_content_subject_list">
+    <div class="tab-pane show active" id="aprobados" role="tabpanel" aria-labelledby="aprobados-tab">
+      <h3>Aprobados por Curso para el periodo {{ request.period }}</h3>
+      <table class="table">
+        <thead class="thead-light">
+          <tr> 
+            <th> Curso </th>
+            <th> Aprobados </th> 
+            <th> Desaprobados </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for curso in grades %}
+          <tr>
+            <td> {{curso.subject_name}} </td>
+            <td> {{curso.aprobados}} %</td>
+            <td> {{curso.desaprobados}} %</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="tab-pane" id="merito" role="tabpanel" aria-labelledby="merito-tab">
+      <h3>M&eacute;rito General para el periodo {{ request.period }}</h3>
+      <table class="table">
+        <thead class="thead-light">
+          <tr> 
+            <th> M&eacute;rito </th>
+            <th> Nombres y Apellidos</th> 
+            <th> Promedio General </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in merito %}
+          <tr>
+            <td> {{forloop.counter}} </td>
+            <td> {{student.first_name}} {{student.last_name}} </td>
+            <td> {{student.average}} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  
+
+</div>
+{% endif %}
+
+{% endblock %}
