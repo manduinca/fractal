@@ -78,9 +78,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'cxh2k9$$6wukc!(v*ka5_@rokms(7h$geq214n6dt)e$53k9gq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['fractal.edu.pe', 'localhost']
+ALLOWED_HOSTS = ['fractal.edu.pe']
 #ALLOWED_HOSTS = ['localhost']
 
 
@@ -132,12 +132,6 @@ WSGI_APPLICATION = 'fractal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
