@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 from .models import YearSettings, Grado, Seccion, Subject, Teacher, ApoderadoUser, Student, Matricula, Tutor, Grade
-from .logic import computeMonthlyAverageGrade, computeBiMonthlyAverageGrade
+from .logic import computeAverageGrade, computeMonthlyAverageGrade, computeBiMonthlyAverageGrade
 
 # Create your tests here.
 
@@ -13,15 +13,25 @@ class StudentTest(TestCase):
             start_date="2019-03-04",
             end_date="2019-12-14",
             holidays=[
-                "2019-04-18", 
-                "2019-04-19", 
-                "2019-04-20", 
-                "2019-05-01", 
-                "2019-06-29", 
-                "2019-08-30", 
-                "2019-10-08", 
-                "2019-10-31", 
-                "2019-12-08"])
+              "2019-04-18", 
+              "2019-04-19", 
+              "2019-04-20", 
+              "2019-05-01", 
+              "2019-06-29", 
+              "2019-08-30", 
+              "2019-10-08", 
+              "2019-10-31", 
+              "2019-12-08"],
+            periods=[
+              { "start": "2019-03-04", "end": "2019-04-06" }, 
+              { "start": "2019-04-08", "end": "2019-05-11" }, 
+              { "start": "2019-05-13", "end": "2019-06-15" }, 
+              { "start": "2019-06-17", "end": "2019-07-20" }, 
+              { "start": "2019-08-05", "end": "2019-09-07" }, 
+              { "start": "2019-09-09", "end": "2019-10-12" }, 
+              { "start": "2019-10-14", "end": "2019-11-16" }, 
+              { "start": "2019-11-18", "end": "2019-12-14" }]
+            )
     # Usual grados
     cuarto = Grado.objects.create(name="Cuarto de secundaria", 
             grado=4,
@@ -254,17 +264,37 @@ class StudentTest(TestCase):
   def test_all(self):
     ys = YearSettings.objects.get(year=2019)
     self.assertEqual(ys.year, 2019)
-    pm1=13.8
-    pm2=16.45
-    #pb=15.125
-    #pm1 = computeMonthlyAverageGrade
-    #pm2 = computeMonthlyAverageGrade
-    pb = computeBiMonthlyAverageGrade(pm1, pm2)
-    self.assertEqual(pm1, 13.8)
-    self.assertEqual(pm2, 16.45)
-    self.assertEqual(pb, 15.125)
 
-  def test_bimonthly_average(self):
-    pb=15.125
-    self.assertEqual(pb, 15.125)
+    #self.test_computeAverageGrade()
+    #self.test_computeMonthlyAverageGrade()
+    #self.test_computeBiMonthlyAverageGrade()
 
+  def test_computeAverageGrade(self):
+    student = Student.objects.get(dni=22222201)
+    curso = Subject.objects.get(name="Matematica")
+    expected_avg = 14
+    period = { "start": "2019-06-01", "end": "2019-06-30" }
+    avg = computeAverageGrade(student, curso, 1, period)
+    self.assertEqual(avg, expected_avg)
+
+  def test_computeMonthlyAverageGrade(self):
+    student = Student.objects.get(dni=22222201)
+    curso = Subject.objects.get(name="Matematica")
+    ys = YearSettings.objects.get(year=2019)
+    expected_avg = 13
+    period = 3
+    grading_info = {
+      "has_dailyeval_grade": True,
+      "has_homeworks":       True,
+      "has_notebook_grade":  True,
+      "has_monthly_exam":    True,
+    }
+    avg = computeMonthlyAverageGrade(student, curso, ys.periods, period, grading_info)
+    self.assertEqual(avg, expected_avg)
+    
+  def test_computeBiMonthlyAverageGrade(self):
+    p1 = { "pm": "17" }
+    p2 = { "pm": "16" }
+    avg = computeBiMonthlyAverageGrade(p1, p2)
+    expected_avg = 17
+    self.assertEqual(avg, expected_avg)

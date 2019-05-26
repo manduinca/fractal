@@ -601,7 +601,7 @@ def computeBiMonthlyAverageGrade( pm1, pm2 ):
   if p1=="-" or p2=="-":
     return None
   else:
-    return round((float(p1)+float(p2))/2)
+    return round((int(p1) + int(p2))/2)
 
 def getTeacherInfo(ys_id, matricula):
   teacher = {}
