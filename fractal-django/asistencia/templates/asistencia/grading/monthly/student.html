@@ -46,7 +46,9 @@
     <thead class="thead-light">
       <tr>
         <th> Curso </th>
+        {% if request.has_homeworks %}
         <th> Promedio Tareas </th>
+        {% endif %}
         <th> Promedio Evaluaciones </th>
         <th> Examen mensual </th>
         <th> Nota de Cuaderno </th>
@@ -58,7 +60,9 @@
       {% for g in s.grades %}
       <tr>
         <td>{{ g.subject_name }}</td>
+        {% if request.has_homeworks %}
         <td>{{ g.pt }}</td>
+        {% endif %}
         <td>{{ g.pe }}</td>
         <td>{{ g.em }}</td>
         <td>{{ g.nc }}</td>

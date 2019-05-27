@@ -256,10 +256,10 @@ class StudentTest(TestCase):
             grade = 18, date = "2019-05-21", grade_type = 2)
     # Examen mensual
     Grade.objects.create(subject = curso1, student = stude1,
-            grade = 18, period = 2, grade_type = 4)
+            grade = 18, period = 3, grade_type = 4)
     # Cuaderno
     Grade.objects.create(subject = curso1, student = stude1,
-            grade = 12, period = 2, grade_type = 5)
+            grade = 12, period = 3, grade_type = 5)
                      
   def test_all(self):
     ys = YearSettings.objects.get(year=2019)
@@ -281,7 +281,15 @@ class StudentTest(TestCase):
     student = Student.objects.get(dni=22222201)
     curso = Subject.objects.get(name="Matematica")
     ys = YearSettings.objects.get(year=2019)
-    expected_avg = 13
+    expected_avg = {
+      "subject_name" : "Matematica",
+      "period" : 3,
+      "pe": 18, #weight: 2
+      "pt": 14, #weight: 2
+      "nc": 12, #weight: 1
+      "em": 18, #weight: 5
+      "pm": 17
+    }
     period = 3
     grading_info = {
       "has_dailyeval_grade": True,
@@ -290,6 +298,7 @@ class StudentTest(TestCase):
       "has_monthly_exam":    True,
     }
     avg = computeMonthlyAverageGrade(student, curso, ys.periods, period, grading_info)
+    print(avg)
     self.assertEqual(avg, expected_avg)
     
   def test_computeBiMonthlyAverageGrade(self):

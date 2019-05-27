@@ -7,20 +7,19 @@ Development
 2. Refactor logic.py
 3. Refactor views.py
 6. Fix frontend for all the views where any tab is selected at all when loading the page, and then when updating the just updated tab should be shown
-7. 4to secundaria: if they don't have homeworks, the column shouldn't even appear on monthly grades
 8. Properly use logger
 
 
-2. Solo notas del dia para los padres, que no se muestren los que no tienen nota, para los apoderados
-   semanal tampoco que se muestre nada. OK
 Obs
 ===
-1. para seleccion, el promedio mensual sería solo el promedio de las evaluaciones diarias, y el bimestral el promedio de los 2 meses. 
-2. mostrar merito por simulacro
-3. don't consider tutoria for reporte aprobados
 4. Verify schedule for seleccion. Should work, must verify!
-5. promedios mensual: dos casos: 18 y 19 debe ser 19 el promedio; 20, 20, 20 y 14 promdedio debe ser 19 para algunas notas
-6. simulacros: las notas no se estan guardando
+5. promedios mensual: dos casos: 18 y 19 debe ser 19 el promedio; 20, 20, 20 y 14 promdedio debe ser 19 para algunas notas. OK
+3. don't consider tutoria for reporte aprobados. OK
+2. Solo notas del dia para los padres, que no se muestren los que no tienen nota, para los apoderados semanal tampoco que se muestre nada. OK
+7. 5to secundaria: if they don't have homeworks, the column shouldn't even appear on monthly grades. OK
+6. simulacros: las notas no se estan guardando. OK
+1. para seleccion, el promedio mensual sería solo el promedio de las evaluaciones diarias, y el bimestral el promedio de los 2 meses. OK
+2. mostrar merito por simulacro. OK
 
 matricula: repetitivo, password
 si no figura el nombre del apoderado, se pone del padre, sino de la madre

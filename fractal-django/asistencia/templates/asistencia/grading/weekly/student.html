@@ -43,6 +43,7 @@
         <!--th> Curso </th-->
         {% if request.has_weekly_grades %}
         <th> Nota Simulacro </th>
+        <th> M&eacute;rito </th>
         {% endif %}
         <th> Semana </th>
       </tr>
@@ -53,6 +54,7 @@
         <!--td>{{ g.subject_name }}</td-->
         {% if request.has_weekly_grades %}
         <th> {{ g.simulacro }} </th>
+        <th> {{ g.merito }} </th>
         {% endif %}
         <td>{{ g.week }}</td>
       </tr>

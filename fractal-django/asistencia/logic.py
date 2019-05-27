@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from .models import Asistencia, ApoderadoUser, Student, Schedule, YearSettings, Tutor, Subject, Matricula, Grade, Teacher
-import math
+import math, decimal
 import logging
 
 def processStudentRequest():
@@ -358,7 +358,7 @@ def computeAverageGrade(student_id, subject_id, grade_type, period ):
           date__gte=start_date,
           date__lte=end_date)
   if grades:
-    return round(grades.aggregate(Avg('grade'))["grade__avg"])
+    return roundUp(grades.aggregate(Avg('grade'))["grade__avg"])
   else:
     return grades.aggregate(Avg('grade'))["grade__avg"]
       
@@ -592,21 +592,29 @@ def computeMonthlyAverageGrade(student, subject, periods, period, grading_info):
 
   grade["subject_name"] = subject.name
   grade["period"] = period
-  grade["pm"] = "-" if not has_monthly_avg else round((grade["pm"])/weights)
+  grade["pm"] = "-" if not has_monthly_avg else roundUp((grade["pm"])/weights)
   return grade
 
+# MARK: round behavior changes from python 2.7 to 3.x
 def computeBiMonthlyAverageGrade( pm1, pm2 ):
   p1 = pm1["pm"]
   p2 = pm2["pm"]
   if p1=="-" or p2=="-":
     return None
   else:
-    return round((int(p1) + int(p2))/2)
+    return roundUp( (int(p1)+int(p2))/2.0 )
+
+# this function receives a float
+def roundUp(number):
+  decimal.getcontext().rounding = decimal.ROUND_HALF_UP
+  return int(decimal.Decimal( number ).to_integral_value())
+  
 
 def getTeacherInfo(ys_id, matricula):
   teacher = {}
   tutor_obj = Tutor.objects.filter(year_id=ys_id, seccion_id=matricula.seccion.id).first()
   teacher_obj = Teacher.objects.get(id=tutor_obj.teacher.id)
+  teacher["id"] = teacher_obj.id
   teacher["name"] = "{} {}".format(teacher_obj.first_name, teacher_obj.last_name)
   teacher["grado"]= matricula.seccion.grado.name
   teacher["seccion"] = matricula.seccion.section
@@ -633,9 +641,10 @@ def getWeeklyGradesForStudent( apoderado_id, ys_id, weeks, week, grading_info ):
       grade = {}
       has_grade = False
       if grading_info["has_simulacros"]:
+        grade["simulacro"], grade["merito"] = getWeeklyGradeAndOrder(ys_id, matricula, idx+1)
         grade_obj = Grade.objects.filter(student_id=s.id, 
                 subject_id__isnull=True, week=idx+1, grade_type=6).first()
-        grade["simulacro"] = "-" if not grade_obj else grade_obj.grade
+        #grade["simulacro"] = "-" if not grade_obj else grade_obj.grade
         if grade_obj:
           has_grade = True
       grade["week"] = idx+1
@@ -647,6 +656,30 @@ def getWeeklyGradesForStudent( apoderado_id, ys_id, weeks, week, grading_info ):
     break
   return teacher, students_grades
 
+def getWeeklyGradeAndOrder(ys_id, matricula, week):
+  student = matricula.student
+  grades = []
+  grade_obj = Grade.objects.filter(student_id=student.id, 
+          subject_id__isnull=True, week=week, grade_type=6).first()
+  if not grade_obj:
+    return "-", "-"
+  #FIXME: There's a way of doing this in 2 or 1 query, profile this function
+  for m in Matricula.objects.filter(seccion_id=matricula.seccion.id, yearsettings_id=ys_id):
+    s = Student.objects.get(id=m.student_id)
+    grade = Grade.objects.filter(student_id=s.id, 
+            subject_id__isnull=True, week=week, grade_type=6).first()
+    if grade:
+      grades.append({ "grade": grade.grade, "student": s.id })
+  
+  grades.sort(key=lambda x: x["grade"])
+  grades.reverse()
+  for idx,g in enumerate(grades):
+    if g["student"] == student.id:
+      merito = idx + 1
+      grade = g["grade"]
+      break
+  return grade, merito
+  
 def saveWeeklyGradesForSubject( params, week):
   #grades = Grade.objects.filter(subject_id=subject_id)
   for (k,v) in params.items():
@@ -763,6 +796,8 @@ def getAprobadosPercentage(teacher_id, ys_id, periods, period, grading_info):
   grades = []
   tutor = Tutor.objects.get(teacher_id=teacher_id, year_id=ys_id)
   for subject in Subject.objects.filter(seccion_id=tutor.seccion.id).order_by('id'):
+    if subject.name.lower().find("tut") >= 0:
+      continue
     grade = {}
     grade["subject_name"] = subject.name
     aprobados = 0
