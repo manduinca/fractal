@@ -487,6 +487,7 @@ def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, period
     s = Student.objects.get(id=m.student_id)
     student = {}
     student["student_name"] = "{} {}".format(s.first_name, s.last_name)
+    student["student_lastname_firstname"] = "{}, {}".format(s.last_name, s.first_name)
     student["student_id"] = s.id
     student["is_selected"] = False
     students.append(student)

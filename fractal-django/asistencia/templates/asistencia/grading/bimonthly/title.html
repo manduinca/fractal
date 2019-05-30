@@ -29,7 +29,7 @@
     <div class="col-md-8">
       <select class="form-control" name="student_id" id="student-select">
       {% for student in students %}
-        <option {% if student.is_selected %} selected="true" {% endif %} value="{{student.student_id}}">{{student.student_name}}</option>
+        <option {% if student.is_selected %} selected="true" {% endif %} value="{{student.student_id}}">{{student.student_lastname_firstname}}</option>
       {% endfor %}
       </select>
     </div>
