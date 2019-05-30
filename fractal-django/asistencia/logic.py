@@ -541,6 +541,7 @@ def getBiMonthlyGradesForStudent( apoderado_id, ys_id, periods, bimonth, grading
   return teacher, students_grades
 
 # this computes the month average for a given student and subject, in the required period according to the periods and grading_info
+# The period starts in 1
 def computeMonthlyAverageGrade(student, subject, periods, period, grading_info):
   has_monthly_avg = True
   weights = 0
@@ -802,22 +803,28 @@ def getAprobadosPercentage(teacher_id, ys_id, periods, period, grading_info):
     grade["subject_name"] = subject.name
     aprobados = 0
     desaprobados = 0
-    everyone_has_grades = True
+    missing_grade_students = []
+    # Iterating over all the students in the subject
     for matricula in Matricula.objects.filter(seccion_id=tutor.seccion.id, yearsettings_id=ys_id).order_by('student__last_name'):
       student = Student.objects.get(id=matricula.student_id)
       g = computeMonthlyAverageGrade(student, subject, periods, period, grading_info)
       if g["pm"] == "-":
-        everyone_has_grades = False 
-        break
-      if float(g["pm"]) >= 11:
-        aprobados += 1
-      else:
-        desaprobados += 1
-    if not everyone_has_grades:
+        missing_grade_students.append(student)
+      else: 
+        if float(g["pm"]) >= 11:
+          aprobados += 1
+        else:
+          desaprobados += 1
+    total = aprobados + desaprobados
+    if total > 0:
+      grade["aprobados"] = round(aprobados*100.0/(total),2)
+      grade["desaprobados"] = round(desaprobados*100.0/(total),2)
+      grade["missing_students_count"] = len(missing_grade_students)
+      grade["missing_students_detail"] = missing_grade_students
+    else:
       grade["aprobados"] = "-"
       grade["desaprobados"] = "-"
-    else:
-      grade["aprobados"] = aprobados*100.0/(aprobados+desaprobados)
-      grade["desaprobados"] = desaprobados*100.0/(aprobados+desaprobados)
+      grade["missing_students_count"] = "Todos"
+      grade["missing_students_detail"] = missing_grade_students
     grades.append(grade)
-    return grades
+  return grades
