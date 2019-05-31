@@ -28,7 +28,11 @@ class GradoAdmin(admin.ModelAdmin):
 
 class MatriculaAdmin(admin.ModelAdmin):
     #search_fields = [ 'seccion', ]
-    list_display = ( 'yearsettings', 'student', 'seccion', )
+    list_display = ( 'yearsettings', 'student', 'seccion', 'get_apoderado' )
+    list_display_links = ( 'student', 'get_apoderado', )
+    list_filter = ( 'seccion', )
+    def get_apoderado(self, obj):
+        return obj.student.apoderado
 
 class YearSettingsAdmin(admin.ModelAdmin):
     list_display = ( 'year', 'start_date', 'end_date', 'holidays')
@@ -85,6 +89,8 @@ class ApoderadoUserAdmin(UserAdmin):
 
 class ApoderadoUserAdmin2(admin.ModelAdmin):
     list_display = ( 'username', 'first_name', 'last_name', 'dni' )
+    search_fields = [ 'username', ]
+
 admin.site.register(ApoderadoUser, ApoderadoUserAdmin2)
 #admin.site.register(ApoderadoUser)
 admin.site.register(Teacher, TeacherAdmin)

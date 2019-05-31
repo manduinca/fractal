@@ -789,7 +789,8 @@ def getMerito(teacher_id, ys_id, periods, period, grading_info):
     if has_grades_in_all_subjects:
       merito["first_name"] = student.first_name
       merito["last_name"] = student.last_name
-      merito["average"] = roundUp(avg/count)
+      merito["average"] = round(avg/count,2)
+      #merito["average"] = roundUp(avg/count)
       list_merito.append(merito)
   list_merito.sort(key=lambda x: x["average"], reverse=True)
   return list_merito

@@ -537,11 +537,14 @@ def getLibretas(request):
   for area,areas in grades.items():
     grade = 0
     for subject in areas["subjects"]:
-      grade += subject["pb"]
+      if subject["pb"] != "-":
+        grade += subject["pb"]
     #FIXME:subjects["grade"] = roundUp(grade/len(area["subjects"]))
     areas["grade"] = round(grade/len(areas["subjects"]))
       
   for area,areas in grades.items():
+    if unidecode(area).find("tutoria") >= 0:
+      continue
     p.setFillColorRGB(0.125, 0.386, 0.6)
     p.rect(x_curso-5, y-5, 150, 20, stroke=0, fill=1)
     p.setFillColorRGB(0,0,0)
