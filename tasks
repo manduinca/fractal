@@ -20,6 +20,8 @@ Obs
 6. simulacros: las notas no se estan guardando. OK
 1. para seleccion, el promedio mensual sería solo el promedio de las evaluaciones diarias, y el bimestral el promedio de los 2 meses. OK
 2. mostrar merito por simulacro. OK
+no hay merito ni aprobados. OK
+solo para 3ro de secundaria, infinitos decimales, reverse order. OK
 
 When deploying, currently the migrations in production don't match the ones in local. 
 
@@ -33,6 +35,7 @@ Ciencias sociales:
 historia universal
 historia del peru
 geografia
+Areas: Matematica, Comunicacion, Ciencia y Tecnologia, Ciencias Sociales
 
 
 3. reporte de fin de anho segun lo enviado
@@ -41,8 +44,6 @@ geografia
  . no han pagado hasta la quincena, sale un mensaje
  . no han pagado hasta despues de un mes, que no vea notas
 
-no hay merito ni aprobados
-solo para 3ro de secundaria, infinitos decimales, reverse order
 
 
 Luis tasks
