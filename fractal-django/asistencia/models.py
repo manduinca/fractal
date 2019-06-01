@@ -170,9 +170,9 @@ class Matricula(models.Model):
   student = models.ForeignKey(Student, on_delete=models.CASCADE)
   seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE, null=True)
   def __unicode__(self):
-    return str(self.yearsettings.year) + ":" + self.student.first_name
+    return "({}): {},{}".format(self.yearsettings.year, self.student.apoderado.username, self.seccion)
   def __str__(self):
-    return str(self.yearsettings.year) + ":" + self.student.first_name
+    return "({}): {},{}".format(self.yearsettings.year, self.student.apoderado.username, self.seccion)
 
 class Asistencia(models.Model):
   student = models.ForeignKey(Student, on_delete=models.CASCADE)
