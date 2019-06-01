@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Modulo de Pagos{% endblock %}
+{% block content %}
+<div>
+  <h3>Reporte de pagos a la fecha <b>{{ report_date }}</b></h3>
+  <ul class="list-group">
+    <li class="list-group-item">Monto de deuda existente: {{ total_debt_amount }}</li>
+    <li class="list-group-item">Usuarios <b>NO</b> considerados: {{ no_config_users }}</li>
+    <li class="list-group-item">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-payments">Lista de Pagos</button>
+    </li>
+    <li class="list-group-item">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-debtors">Lista de Deudores</button>
+    </li>
+  </ul>
+  <form style="margin-top:20px" action="{% url 'billing_report' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Descargar Lista de Pagos">
+  </form>
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="modal-payments"
+                                      role="dialog" aria-labelledby="modal-payments">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Lista de Pagos</h5>
+      </div>
+      <table class="table table-hover">
+        <thead class="thead-light">
+        </thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Monto</th>
+          <th>Concepto</th>
+          <th>Grado</th>
+        </tr>
+        <tbody>
+          {% for payment in payments %}
+          <tr>
+            <td>{{ payment.user }}</td>
+            <td>{{ payment.amount }}</td>
+            {% if payment.pay_reference == 0 %}
+            <td>Matricula</td>
+            {% else %}
+            <td>Mensualidad mes {{ payment.pay_reference }}</td>
+            {% endif %}
+            <td>{{ payment.grado }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal-debtors"
+                                      role="dialog" aria-labelledby="modal-debtors">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Lista de Deudores</h5>
+      </div>
+      <ul class="list-group">
+        {% for debtor in debtors %}
+        <li class="list-group-item"> {{ debtor.username }} ({{debtor.grado}}) </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
