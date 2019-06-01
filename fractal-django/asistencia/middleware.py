@@ -1,6 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
-from .models import YearSettings, Student, Matricula, Tutor
+from .models import YearSettings, Student, Matricula, Tutor, ApoderadoUser
+from billing.logic import getUserPaymentStatus
 import logging, math
 
 # get the user role, name and default date
@@ -19,7 +20,7 @@ class SetupFractal:
       request.is_teacher = True
     elif request.user.is_superuser:
       request.is_admin = True
-
+      
   def setRequestUserName(self, request):
     if not request.user.is_anonymous:
       request.user_name = "{} {}".format(request.user.first_name, request.user.last_name)
@@ -83,6 +84,12 @@ class SetupFractal:
     logger.error("has weekly grades {}".format(request.has_weekly_grades))
     logger.error("has monthly grades {}".format(request.has_monthly_grades))
 
+  # call me after setRequestUserRole
+  def setUserPaymentStatus(self, request):
+    if request.is_student:
+      user = ApoderadoUser.objects.get(id=request.user.id)
+      request.payment_status = getUserPaymentStatus(user)
+
   def __call__(self, request):
     # Code to be executed for each request before
     # the view (and later moddleware) are called.
@@ -90,6 +97,9 @@ class SetupFractal:
 
     # set user role
     self.setRequestUserRole(request)
+
+    # set payment status
+    self.setUserPaymentStatus(request)
 
     # set user_name
     self.setRequestUserName(request)
