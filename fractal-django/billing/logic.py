@@ -12,21 +12,18 @@ def getUserPaymentStatus(user):
   OVERDUE = 3
   status = PAID
   student = Student.objects.get(apoderado=user)
-  matricula = Matricula.objects.filter(student=student)
-  payment_settings = PaymentSettings.objects.get(matricula=matricula)
+  matricula = Matricula.objects.get(student=student)
+  payment_settings = PaymentSettings.objects.filter(matricula=matricula).first()
   if payment_settings:
     required_amount = payment_settings.monthly_amount
     today = datetime.now()
-    print(today.month)
     current_month = today.month
     payments = [ { "required": True, "paid": False, "pay_reference": 0 } ]
     # Load payment requirements
     for i in range(1, 11):
       required = True if today.month >= i+2 else False
-      #payments[str(i)] = { "required": required , "paid": False }
       payments.append({ "required": required , "paid": False , "pay_reference": i })
-    #payments=dict(sorted(payments.items(), key = lambda x:x[0]))
-    print(payments)
+    #print(payments)
 
     # Load actual payments from DB
     for payment in Payment.objects.filter(payment_settings = payment_settings).order_by('pay_reference'):
@@ -41,17 +38,17 @@ def getUserPaymentStatus(user):
       else:
         paid = True if payment.amount >= payment_settings.monthly_amount else False
       payments[payment.pay_reference]["paid"] = paid
-    print(payments)
+    #print(payments)
 
     # Now properly set the state!
     for idx, payment in enumerate(payments):
       # if this payment is required, but not paid set either 
       # warning or overdue, depending on the date!
       if payment["required"] and not payment["paid"]:
-        if today.month >= int(idx+2):
-          status = OVERDUE
-        elif today.day >= 15:
+        #print(payment)
+        if today.day <= 15:
           status = WARNING
-      
+        else:
+          status = OVERDUE
 
   return status
