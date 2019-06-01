@@ -87,6 +87,7 @@ ALLOWED_HOSTS = ['fractal.edu.pe', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'billing',
     'asistencia.apps.AsistenciaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
