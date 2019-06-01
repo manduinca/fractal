@@ -4,6 +4,9 @@ tar_file="fractal-django.tar.gz"
 USER="www_fractal"
 HOST="fractal.edu.pe"
 
+# First run tests inside docker!
+python manage.py test
+
 tar cvf ${tar_file} fractal_django
 
 scp ${tar_file} ${USER}@${HOST}:
@@ -18,4 +21,4 @@ cp producion_settings.py settings.py
 
 rm -rf asistencias/migrations
 
-docker-compose up
+docker-compose up --build
