@@ -9,7 +9,18 @@
   {% include 'asistencia/grading/monthly/teacher.html' %}
 </div>
 {% elif request.is_student %}
-  {% include 'asistencia/grading/monthly/student.html' %}
+  {% if request.payment_status == 1 %}
+    {% include 'asistencia/grading/monthly/student.html' %}
+  {% elif request.payment_status == 2 %}
+    <div class="alert alert-warning" role="alert">
+      La mensualidad se encuentra vencida, por favor pague la mensualidad antes de la quincena.
+    </div>
+    {% include 'asistencia/grading/monthly/student.html' %}
+  {% elif request.payment_status == 3 %}
+    <div class="alert alert-danger" role="alert">
+      No se puede mostrar las notas por falta de pago. Por favor, ac&eacute;rquese a la secretar&iacute;a para regularizar sus pagos.
+    </div>
+  {% endif %}
 {% endif %}
 
 {% endblock %}

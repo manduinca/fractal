@@ -222,6 +222,33 @@ class BillingTest(TestCase):
     freezer.stop()
     self.assertEqual(status, expected_status)
 
+  def test_long_overdue(self):
+    expected_status = 3
+    payment_settings = PaymentSettings.objects.all().first()
+    Payment.objects.create(payment_date="2019-03-01",
+            receipt_nro="123",
+            payment_settings=payment_settings,
+            pay_reference=0,
+            amount=400)
+    Payment.objects.create(payment_date="2019-03-02",
+            receipt_nro="123",
+            payment_settings=payment_settings,
+            pay_reference=1,
+            amount=300)
+
+    user = ApoderadoUser.objects.all().first()
+    freezer = freeze_time("2019-08-11 12:00:00")
+    freezer.start()
+    status = getUserPaymentStatus(user)
+    freezer.stop()
+    self.assertEqual(status, expected_status)
+
+    freezer = freeze_time("2019-08-17 12:00:00")
+    freezer.start()
+    status = getUserPaymentStatus(user)
+    freezer.stop()
+    self.assertEqual(status, expected_status)
+
   def test_no_payment_settings(self):
     expected_status = 1
     user = ApoderadoUser.objects.filter(username = "user_without_settings").first()

@@ -40,8 +40,14 @@ def getUserPaymentStatus(user):
       payments[payment.pay_reference]["paid"] = paid
     #print(payments)
 
-    # Now properly set the state!
+    # Now properly set the state: all payments so far must be done AND the see the situation for current month
     for idx, payment in enumerate(payments):
+      if idx==today.month-2:
+        break
+      if payment["required"] and not payment["paid"]:
+        status = OVERDUE
+    if status!= OVERDUE and today.month >= 3 :
+      payment = payments[today.month-2]
       # if this payment is required, but not paid set either 
       # warning or overdue, depending on the date!
       if payment["required"] and not payment["paid"]:
@@ -50,5 +56,6 @@ def getUserPaymentStatus(user):
           status = WARNING
         else:
           status = OVERDUE
+      
 
   return status

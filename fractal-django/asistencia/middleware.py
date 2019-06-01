@@ -86,9 +86,11 @@ class SetupFractal:
 
   # call me after setRequestUserRole
   def setUserPaymentStatus(self, request):
+    logger = logging.getLogger(__name__)
     if request.is_student:
       user = ApoderadoUser.objects.get(id=request.user.id)
       request.payment_status = getUserPaymentStatus(user)
+      logger.error("UserPaymentStatus {}".format(request.payment_status))
 
   def __call__(self, request):
     # Code to be executed for each request before
