@@ -6,8 +6,8 @@ from django.utils import timezone
 # Create your models here.
 class PaymentSettings(models.Model):
   matricula = models.ForeignKey(Matricula, on_delete=models.CASCADE)
-  matricula_amount = models.DecimalField("Matricula", max_digits=6, decimal_places=2)
-  monthly_amount = models.DecimalField("Mensualidad", max_digits=6, decimal_places=2, default=300.00)
+  matricula_amount = models.DecimalField("Monto de la Matricula", max_digits=6, decimal_places=2)
+  monthly_amount = models.DecimalField("Monto de la Mensualidad", max_digits=6, decimal_places=2, default=300.00)
   has_promo = models.BooleanField("Tiene promocion?", default=False)
   
   class Meta:
