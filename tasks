@@ -10,19 +10,8 @@ Development
 8. Properly use logger
 
 
-Obs
-===
-4. Verify schedule for seleccion. Should work, must verify!
-5. promedios mensual: dos casos: 18 y 19 debe ser 19 el promedio; 20, 20, 20 y 14 promdedio debe ser 19 para algunas notas. OK
-3. don't consider tutoria for reporte aprobados. OK
-2. Solo notas del dia para los padres, que no se muestren los que no tienen nota, para los apoderados semanal tampoco que se muestre nada. OK
-7. 5to secundaria: if they don't have homeworks, the column shouldn't even appear on monthly grades. OK
-6. simulacros: las notas no se estan guardando. OK
-1. para seleccion, el promedio mensual sería solo el promedio de las evaluaciones diarias, y el bimestral el promedio de los 2 meses. OK
-2. mostrar merito por simulacro. OK
-no hay merito ni aprobados. OK
-solo para 3ro de secundaria, infinitos decimales, reverse order. OK
-
+Observaciones:
+=============
 When deploying, currently the migrations in production don't match the ones in local. 
 
 matricula: repetitivo, password
@@ -30,21 +19,18 @@ si no figura el nombre del apoderado, se pone del padre, sino de la madre
 
 escribir el password
 Mejoras:
-1. La libreta de notas:  promedio de matematicas, 
-Ciencias sociales: 
-historia universal
-historia del peru
-geografia
-Areas: Matematica, Comunicacion, Ciencia y Tecnologia, Ciencias Sociales
 
+Fix migration thing
 
-3. reporte de fin de anho segun lo enviado
+Arreglar la fechas
+Reporte: Monto de deuda (verificar), dice matricula para todo
+Agregar boton: lista de deudores, agregar monto de deuda a excel y a la web
+Agregar filtros en el adminitrados
+Por defecto setear el input del pago sea igual a la mensualidad
 
-5. agregar pagos de las mensualidades, grado, fecha, nro de recibo, monto pagado, matricula 300
- . no han pagado hasta la quincena, sale un mensaje
- . no han pagado hasta despues de un mes, que no vea notas
-
-
+merito aun no se muestra. 1, 2, 4
+movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion
+agregar campo para considerar el primer mes de pago
 
 Luis tasks
 ==========

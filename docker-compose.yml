@@ -15,6 +15,7 @@ services:
     build: .
     container_name: fractal-django
     command: bash -c "python manage.py makemigrations && python manage.py collectstatic --noinput && python manage.py migrate && gunicorn fractal.wsgi -b 0.0.0.0:8000 --reload"
+    #command: bash -c "python manage.py makemigrations && python manage.py collectstatic --noinput && python manage.py migrate --fake asistencia && python manage.py migrate billing && gunicorn fractal.wsgi -b 0.0.0.0:8000"
     volumes:
       - ./fractal-django:/fractal-django
       - /static:/static  

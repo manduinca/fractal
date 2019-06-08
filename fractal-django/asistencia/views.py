@@ -603,23 +603,23 @@ class BillingReport(LoginRequiredMixin, generic.ListView):
       if payment["pay_reference"] == 0:
         concept = "Matricula"
       elif payment["pay_reference"] == 1:
-        cept = "Marzo"
+        concept  = "Marzo"
       elif payment["pay_reference"] == 2:
-        cept = "Abril"
+        concept  = "Abril"
       elif payment["pay_reference"] == 3:
-        cept = "Mayo"
+        concept  = "Mayo"
       elif payment["pay_reference"] == 4:
-        cept = "Junio"
+        concept  = "Junio"
       elif payment["pay_reference"] == 5:
-        cept = "Julio"
+        concept  = "Julio"
       elif payment["pay_reference"] == 6:
-        cept = "Agosto"
+        concept  = "Agosto"
       elif payment["pay_reference"] == 7:
-        cept = "Septiembre"
+        concept  = "Septiembre"
       elif payment["pay_reference"] == 8:
-        cept = "Octubre"
+        concept  = "Octubre"
       elif payment["pay_reference"] == 9:
-        cept = "Noviembre"
+        concept  = "Noviembre"
       elif payment["pay_reference"] == 10:
         concept = "Diciembre"
       writer.writerow([ payment["user"], payment["amount"], concept, payment["grado"] ])

@@ -18,8 +18,11 @@ exit
 
 scp ${USER}@{HOST}:${REMOTE_PATH}/latest_db.json latest_db.json
 
+# manually remove the content type? what's that?
 
 docker exec -it fractal-django /bin/bash
 python manage.py flush
+
+
 python manage.py loaddata latest_db.json
 
