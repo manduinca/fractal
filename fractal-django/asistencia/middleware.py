@@ -89,7 +89,7 @@ class SetupFractal:
     logger = logging.getLogger(__name__)
     if request.is_student:
       user = ApoderadoUser.objects.get(id=request.user.id)
-      request.payment_status = getUserPaymentStatus(user)
+      request.payment_status, debt = getUserPaymentStatus(user)
       logger.error("UserPaymentStatus {}".format(request.payment_status))
 
   def __call__(self, request):
