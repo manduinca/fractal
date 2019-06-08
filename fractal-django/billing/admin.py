@@ -6,12 +6,15 @@ from .models import PaymentSettings, Payment
 class PaymentSettingsAdmin(admin.ModelAdmin):
   list_display = ( 'matricula', 'matricula_amount', 'monthly_amount', 'has_promo', 'apoderado' )
   list_display_links = ( 'apoderado', )
+  #search_fields = [ 'matricula', ]
+  list_filter = ( 'matricula__seccion', )
   def apoderado(self, obj):
     return obj.matricula.student.apoderado.username
 
 class PaymentAdmin(admin.ModelAdmin):
   list_display =  ( 'payment_date', 'receipt_nro', 'pay_reference', 'amount', 'apoderado' )
   list_display_links = ( 'apoderado', )
+  list_filter = ( 'payment_settings__matricula__seccion', )
   def apoderado(self, obj):
     return obj.payment_settings.matricula.student.apoderado.username
 

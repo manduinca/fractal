@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
   #url(r'^libretas/<int:student_id>/$', views.getLibretas, name='download_libretas'),
+  url(r'^debtors_list/$', views.DebtorsList.as_view(), name='debtors_list'),
   url(r'^billing_report/$', views.BillingReport.as_view(), name='billing_report'),
 
   url(r'^libretas/$', views.getLibretas, name='download_libretas'),

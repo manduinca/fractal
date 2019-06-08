@@ -110,7 +110,7 @@ class BillingTest(TestCase):
     user = ApoderadoUser.objects.all().first()
     freezer = freeze_time("2019-05-17 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
@@ -134,9 +134,9 @@ class BillingTest(TestCase):
             amount=300)
 
     user = ApoderadoUser.objects.all().first()
-    freezer = freeze_time("2019-05-12 12:00:00")
+    freezer = freeze_time("2019-05-16 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
@@ -160,9 +160,9 @@ class BillingTest(TestCase):
             amount=300)
 
     user = ApoderadoUser.objects.all().first()
-    freezer = freeze_time("2019-05-17 12:00:00")
+    freezer = freeze_time("2019-06-01 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
@@ -175,7 +175,6 @@ class BillingTest(TestCase):
             pay_reference=0,
             amount=400)
     for pay_ref in range(1,10):
-      print(pay_ref)
       Payment.objects.create(payment_date="2019-{}-02".format(pay_ref),
               receipt_nro="123",
               payment_settings=payment_settings,
@@ -190,7 +189,7 @@ class BillingTest(TestCase):
     user = ApoderadoUser.objects.filter(username="user_with_promo").first()
     freezer = freeze_time("2019-12-07 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
@@ -203,7 +202,6 @@ class BillingTest(TestCase):
             pay_reference=0,
             amount=400)
     for pay_ref in range(1,10):
-      print(pay_ref)
       Payment.objects.create(payment_date="2019-{}-02".format(pay_ref),
               receipt_nro="123",
               payment_settings=payment_settings,
@@ -218,7 +216,7 @@ class BillingTest(TestCase):
     user = ApoderadoUser.objects.all().first()
     freezer = freeze_time("2019-12-16 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
@@ -239,18 +237,18 @@ class BillingTest(TestCase):
     user = ApoderadoUser.objects.all().first()
     freezer = freeze_time("2019-08-11 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
     freezer = freeze_time("2019-08-17 12:00:00")
     freezer.start()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     freezer.stop()
     self.assertEqual(status, expected_status)
 
   def test_no_payment_settings(self):
     expected_status = 1
     user = ApoderadoUser.objects.filter(username = "user_without_settings").first()
-    status = getUserPaymentStatus(user)
+    status, paid = getUserPaymentStatus(user)
     self.assertEqual(status, expected_status)

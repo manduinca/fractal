@@ -625,3 +625,22 @@ class BillingReport(LoginRequiredMixin, generic.ListView):
       writer.writerow([ payment["user"], payment["amount"], concept, payment["grado"] ])
 
     return response
+
+class DebtorsList(LoginRequiredMixin, generic.ListView):
+  login_url = 'login/'
+  redirect_field_name = 'redirect_to'
+
+  def post(self, request, *args, **kwargs):
+    if request.is_student:
+      return redirect ("asistencias_list")
+    elif request.is_teacher:
+      return redirect ("grading_daily")
+    report = getAdminReport()
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="lista_deudores_{}.csv"'.format(report["report_date"])
+
+    writer = csv.writer(response)
+    writer.writerow(['Usuario', 'Grado', 'Monto'])
+    for debtor in report["debtors"]:
+      writer.writerow([ debtor["username"], debtor["grado"], debtor["debt"] ])
+    return response

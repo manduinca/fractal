@@ -6,6 +6,8 @@ HOST="fractal.edu.pe"
 
 # First run tests inside docker!
 python manage.py test
+#python manage.py test billing
+#billing.tests.BillingTest.test_status_warning
 
 tar cvf ${tar_file} fractal_django
 

@@ -17,17 +17,16 @@ When deploying, currently the migrations in production don't match the ones in l
 matricula: repetitivo, password
 si no figura el nombre del apoderado, se pone del padre, sino de la madre
 
-escribir el password
-Mejoras:
-
 Fix migration thing
 
-Arreglar la fechas
-Reporte: Monto de deuda (verificar), dice matricula para todo
-Agregar boton: lista de deudores, agregar monto de deuda a excel y a la web
-Agregar filtros en el adminitrados
-Por defecto setear el input del pago sea igual a la mensualidad
+======
 
+Reporte: Monto de deuda (verificar), dice matricula para todo. OK
+Agregar boton: lista de deudores, agregar monto de deuda a excel y a la web. OK
+Arreglar la fechas de vencimiento y de advertencia.OK
+Agregar filtros en el adminitrados.OK
+
+Por defecto setear el input del pago sea igual a la mensualidad
 merito aun no se muestra. 1, 2, 4
 movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion
 agregar campo para considerar el primer mes de pago
