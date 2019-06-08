@@ -16,11 +16,12 @@ def getUserPaymentStatus(user):
   matricula = Matricula.objects.get(student=student)
   payment_settings = PaymentSettings.objects.filter(matricula=matricula).first()
   if payment_settings:
+    first_month = payment_settings.first_month
     required_amount = payment_settings.monthly_amount
     today = datetime.now()
     current_month = today.month
     payments = [{ 
-              #"required": True, 
+              "required": True, 
               "paid": False, 
               "pay_reference": 0,
               "warning_date": date(matricula.yearsettings.year,3,15).strftime("%Y-%m-%d"),
@@ -30,14 +31,9 @@ def getUserPaymentStatus(user):
     for i in range(1, 11):
       warning_date = date(matricula.yearsettings.year, i+2, 15)
       due_date = date(matricula.yearsettings.year, i+2, 30)
-      #status = PAID
-      #if today >= warning_date:
-      #  status = WARNING
-      #if today >= due_date:
-      #  status = OVERDUE
-      #required = True if today.month >= i+2 else False
+      required = True if i >= first_month else False
       payments.append({
-          #"required": required,
+          "required": required, # This is true if is required to be paid
           "paid": False,
           "pay_reference": i,
           "warning_date": warning_date.strftime("%Y-%m-%d"),
@@ -73,6 +69,8 @@ def getUserPaymentStatus(user):
     for idx, payment in enumerate(payments):
       #print( today )
       #print(datetime.strptime(payment["warning_date"], "%Y-%m-%d"))
+      if not payment["required"]:
+        continue
       if today > datetime.strptime(payment["warning_date"], "%Y-%m-%d") and not payment["paid"]:
         status = WARNING
       if today > datetime.strptime(payment["due_date"], "%Y-%m-%d") and not payment["paid"]:
@@ -82,8 +80,11 @@ def getUserPaymentStatus(user):
       if idx==today.month-2: #break for next months
         break
 
+    # Behavior just for the last month
     if today > datetime(matricula.yearsettings.year,12,15):
       for payment in payments:
+        if not payment["required"]:
+          continue
         if not payment["paid"]:
           status = OVERDUE
           break

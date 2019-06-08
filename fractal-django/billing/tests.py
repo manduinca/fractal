@@ -51,8 +51,12 @@ class BillingTest(TestCase):
             username = "user_with_promo")
     apod3 = ApoderadoUser.objects.create(dni=11111101,
             first_name = "Apoderado",
-            last_name = "2",
+            last_name = "3",
             username = "user_without_settings")
+    apod4 = ApoderadoUser.objects.create(dni=11111101,
+            first_name = "Apoderado",
+            last_name = "4",
+            username = "user_with_first_month_set")
     stude1 = Student.objects.create(dni=22222201,
             first_name = "Estudiante",
             last_name = "1",
@@ -65,6 +69,10 @@ class BillingTest(TestCase):
             first_name = "Estudiante",
             last_name = "3",
             apoderado = apod3)
+    stude4 = Student.objects.create(dni=22222203,
+            first_name = "Estudiante",
+            last_name = "4",
+            apoderado = apod4)
     matricula1 = Matricula.objects.create(yearsettings = year,
             student = stude1,
             seccion = cto_a)
@@ -74,6 +82,9 @@ class BillingTest(TestCase):
     matricula3 = Matricula.objects.create(yearsettings = year,
             student = stude3,
             seccion = cto_a)
+    matricula4 = Matricula.objects.create(yearsettings = year,
+            student = stude4,
+            seccion = cto_a)
     PaymentSettings.objects.create(matricula = matricula1,
             matricula_amount = 400,
             monthly_amount = 300,
@@ -82,6 +93,11 @@ class BillingTest(TestCase):
             matricula_amount = 400,
             monthly_amount = 250,
             has_promo = True)
+    PaymentSettings.objects.create(matricula = matricula4,
+            matricula_amount = 400,
+            monthly_amount = 300,
+            has_promo = False,
+            first_month = 3)
     
   def test_status_paid(self):
     expected_status = 1
@@ -251,4 +267,29 @@ class BillingTest(TestCase):
     expected_status = 1
     user = ApoderadoUser.objects.filter(username = "user_without_settings").first()
     status, paid = getUserPaymentStatus(user)
+    self.assertEqual(status, expected_status)
+
+  def test_first_month_setting(self):
+    expected_status = 1
+    payment_settings = PaymentSettings.objects.filter(first_month=3).first()
+    Payment.objects.create(payment_date="2019-03-01",
+            receipt_nro="123",
+            payment_settings=payment_settings,
+            pay_reference=0,
+            amount=400)
+    Payment.objects.create(payment_date="2019-04-02",
+            receipt_nro="123",
+            payment_settings=payment_settings,
+            pay_reference=3,
+            amount=300)
+    Payment.objects.create(payment_date="2019-05-02",
+            receipt_nro="123",
+            payment_settings=payment_settings,
+            pay_reference=4,
+            amount=300)
+    user = ApoderadoUser.objects.filter(username = "user_with_first_month_set").first()
+    freezer = freeze_time("2019-07-02 12:00:00")
+    freezer.start()
+    status, paid = getUserPaymentStatus(user)
+    freezer.stop()
     self.assertEqual(status, expected_status)

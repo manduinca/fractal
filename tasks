@@ -8,28 +8,21 @@ Development
 3. Refactor views.py
 6. Fix frontend for all the views where any tab is selected at all when loading the page, and then when updating the just updated tab should be shown
 8. Properly use logger
-
+9. Improve the creation of users. It's too repetitive now (the password part specially)
+10. Fix migration mismatchs
 
 Observaciones:
 =============
-When deploying, currently the migrations in production don't match the ones in local. 
-
-matricula: repetitivo, password
-si no figura el nombre del apoderado, se pone del padre, sino de la madre
-
-Fix migration thing
-
-======
 
 Reporte: Monto de deuda (verificar), dice matricula para todo. OK
 Agregar boton: lista de deudores, agregar monto de deuda a excel y a la web. OK
 Arreglar la fechas de vencimiento y de advertencia.OK
 Agregar filtros en el adminitrados.OK
+agregar campo para considerar el primer mes de pago. OK
 
-Por defecto setear el input del pago sea igual a la mensualidad
+Por defecto setear el input del pago sea igual a la mensualidad. TOO MUCH WORK. VSF
+movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion. VSF
 merito aun no se muestra. 1, 2, 4
-movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion
-agregar campo para considerar el primer mes de pago
 
 Luis tasks
 ==========

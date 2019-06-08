@@ -18,5 +18,10 @@ class PaymentAdmin(admin.ModelAdmin):
   def apoderado(self, obj):
     return obj.payment_settings.matricula.student.apoderado.username
 
+#  def get_form(self, request, obj=None, **kwargs):
+#    form = super(PaymentAdmin, self).get_form(request, obj, **kwargs)
+#    form.base_fields['amount'].initial = obj.payment_settings.monthly_amount
+#    return form
+
 admin.site.register(PaymentSettings, PaymentSettingsAdmin)
 admin.site.register(Payment, PaymentAdmin)

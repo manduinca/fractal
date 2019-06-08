@@ -9,6 +9,19 @@ class PaymentSettings(models.Model):
   matricula_amount = models.DecimalField("Monto de la Matricula", max_digits=6, decimal_places=2)
   monthly_amount = models.DecimalField("Monto de la Mensualidad", max_digits=6, decimal_places=2, default=300.00)
   has_promo = models.BooleanField("Tiene promocion?", default=False)
+  REF_CHOICES = (
+          (1, "Marzo"),
+          (2, "Abril"),
+          (3, "Mayo"),
+          (4, "Junio"),
+          (5, "Julio"),
+          (6, "Agosto"),
+          (7, "Septiembre"),
+          (8, "Octubre"),
+          (9, "Noviembre"),
+          (10, "Diciembre"),
+          )
+  first_month = models.IntegerField("Primer mes de pago", choices=REF_CHOICES, default=1)
   
   class Meta:
     verbose_name = "Configuracion de pagos"
