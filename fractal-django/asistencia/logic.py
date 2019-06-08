@@ -780,6 +780,9 @@ def getMerito(teacher_id, ys_id, periods, period, grading_info):
     count = 0
     has_grades_in_all_subjects = True
     for subject in Subject.objects.filter(seccion_id=tutor.seccion.id).order_by('id'):
+      # ignore tutoria!
+      if subject.name.lower().find("tut") >= 0:
+        continue
       g = computeMonthlyAverageGrade(student, subject, periods, period, grading_info)
       if g["pm"] == "-":
         has_grades_in_all_subjects = False
@@ -799,6 +802,7 @@ def getAprobadosPercentage(teacher_id, ys_id, periods, period, grading_info):
   grades = []
   tutor = Tutor.objects.get(teacher_id=teacher_id, year_id=ys_id)
   for subject in Subject.objects.filter(seccion_id=tutor.seccion.id).order_by('id'):
+    # ignore tutoria!
     if subject.name.lower().find("tut") >= 0:
       continue
     grade = {}

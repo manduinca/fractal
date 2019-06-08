@@ -10,6 +10,7 @@ Development
 8. Properly use logger
 9. Improve the creation of users. It's too repetitive now (the password part specially)
 10. Fix migration mismatchs
+11. Add a field in the subject model to allow it NOT to have grades! (like tutoria)
 
 Observaciones:
 =============
@@ -22,7 +23,6 @@ agregar campo para considerar el primer mes de pago. OK
 
 Por defecto setear el input del pago sea igual a la mensualidad. TOO MUCH WORK. VSF
 movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion. VSF
-merito aun no se muestra. 1, 2, 4
 
 Luis tasks
 ==========
