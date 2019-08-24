@@ -46,6 +46,7 @@
         {% if student.is_selected %}
         <!--form action="/asistencias/libretas/{{student.student_id}}" method="GET"-->
       <input type="hidden" name="student_id" value="{{student.student_id}}">
+      <input type="hidden" name="bimonth" value="{{request.bimonth}}">
         {% endif %}
       {% endfor %}
       <input type="submit" value="Descargar libreta">
