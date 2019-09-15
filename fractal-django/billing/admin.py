@@ -15,6 +15,7 @@ class PaymentAdmin(admin.ModelAdmin):
   list_display =  ( 'payment_date', 'receipt_nro', 'pay_reference', 'amount', 'apoderado' )
   list_display_links = ( 'apoderado', )
   list_filter = ( 'payment_settings__matricula__seccion', )
+  search_fields = [ 'payment_settings__matricula__student__apoderado__username' ]
   def apoderado(self, obj):
     return obj.payment_settings.matricula.student.apoderado.username
 

@@ -1,5 +1,6 @@
 from django.db import models
 from asistencia.models import Matricula
+from django.core.exceptions import ValidationError
 
 from django.utils import timezone
 
@@ -54,6 +55,14 @@ class Payment(models.Model):
   class Meta:
     verbose_name = "Pago"
     verbose_name_plural = "Pagos"
+  def clean(self):
+    payments = Payment.objects.filter(payment_settings = self.payment_settings,pay_reference = self.pay_reference )
+    repeated = False
+    if payments.count() > 0:
+      repeated = True
+    if repeated:
+      raise ValidationError({ 'pay_reference': 'mes repetido' })
+
   def __unicode__(self):
     return "{} {}".format(self.receipt_nro, self.amount)
   def __str__(self):
