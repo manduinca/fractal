@@ -236,12 +236,17 @@ def getMonthlyGradesBySubjectForTeacher( teacher_id, ys_id, period, grading_info
               subject_id=sub.id, 
               grade_type=5,
               period=period).first()
+      n = Grade.objects.filter(student_id=student.id, 
+              subject_id=sub.id, 
+              grade_type=7,
+              period=period).first()
       grade["student"].append(
               { 
                 "student_id": student.id,
                 "name": student.first_name + " " + student.last_name, 
                 "examen": "-" if not e else e.grade, 
                 "cuaderno": "-" if not c else c.grade, 
+                "concepto": "-" if not n else n.grade, 
                 "period": "-" if not c else c.period,
               })
     grades.append(grade)
@@ -300,6 +305,24 @@ def saveMonthlyGradesForSubject(subject_id, params, period):
                   subject_id=subject_id, 
                   period=period, 
                   grade_type=5, 
+                  grade=v)
+        else:
+          g.grade = v
+        g.save()
+      else:
+        g.delete()
+    elif k[0]=='n':
+      student_id = k[1:]
+      g = Grade.objects.filter(student_id=student_id, 
+              subject_id=subject_id, 
+              grade_type=7,
+              period=period).first()
+      if v>=0:
+        if not g:
+          g = Grade(student_id=student_id, 
+                  subject_id=subject_id, 
+                  period=period, 
+                  grade_type=7, 
                   grade=v)
         else:
           g.grade = v
@@ -618,9 +641,14 @@ def computeMonthlyAverageGrade(student, subject, periods, period, grading_info):
       grade["pm"] += grade_examen.grade*weight
     weights += weight
 
+  grade_normalization = Grade.objects.filter(student_id=student.id, subject_id=subject.id, period=period, grade_type=7).first()
+  additional_points = 0.0
+  if grade_normalization:
+    additional_points = grade_normalization.grade*1.0
+
   grade["subject_name"] = subject.name
   grade["period"] = period
-  grade["pm"] = "-" if not has_monthly_avg else roundUp((grade["pm"])/weights)
+  grade["pm"] = "-" if not has_monthly_avg else roundUp((grade["pm"])/weights + additional_points)
   return grade
 
 # MARK: round behavior changes from python 2.7 to 3.x

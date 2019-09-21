@@ -22,6 +22,7 @@
         <th> Nombres y Apellidos </th>
         <th> Examen </th>
         <th> Cuaderno </th>
+        <th data-toggle="tooltip" data-title="Esta nota es agregada directamente al promedio mensual"> Concepto </th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +31,7 @@
         <td> {{ s.name }} </td>
         <td> <input type="text" value="{{ s.examen }}" name="e{{ s.student_id }}"> </td>
         <td> <input type="text" value="{{ s.cuaderno }}" name="c{{ s.student_id }}"> </td>
+        <td> <input type="text" value="{{ s.concepto }}" name="n{{ s.student_id }}"> </td>
       </tr>
       {% endfor %}
     </tbody>

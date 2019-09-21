@@ -200,6 +200,7 @@ class Grade(models.Model):
           (4, "examen"),        #This is monthly
           (5, "cuaderno"),      #This is monthly
           (6, "simulacro"),     #This is weekly, not related to any subject, just to the student
+          (7, "concepto"),      #This is monthly, add is directly added to the monthly grade, so it should be a couple of points to help the student
           )
   grade_type = models.IntegerField("Tipo de nota", choices=GRADE_TYPES, default=1)
   class Meta:
