@@ -13,6 +13,7 @@ urlpatterns = [
   url(r'^monthly/$', views.MonthlyGradingListView.as_view(), name='grading_monthly'),
   url(r'^weekly/$', views.WeeklyGradingListView.as_view(), name='grading_weekly'),
   url(r'^daily/$', views.GradingListView.as_view(), name='grading_daily'),
+  url(r'^payments/$', views.PaymentsView.as_view(), name='payments'),
   url(r'^schedule/$', views.ScheduleListView.as_view(), name='asistencias_schedule'),
   url(r'^uploadasis/$', views.UploadFileForm.as_view(), name='upload_asis'),
   url(r'^login/$', views.LoginAsistenciaView.as_view(), name='asistencias_login'),

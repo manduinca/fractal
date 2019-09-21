@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Pagos{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <h3> Lista de Pagos </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <ul class="list-group">
+        {% for payment in payments %}
+        <li class="list-group-item"> {{ payment }} </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

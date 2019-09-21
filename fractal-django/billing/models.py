@@ -3,6 +3,7 @@ from asistencia.models import Matricula
 from django.core.exceptions import ValidationError
 
 from django.utils import timezone
+from enum import Enum
 
 # Create your models here.
 class PaymentSettings(models.Model):
@@ -32,10 +33,24 @@ class PaymentSettings(models.Model):
   def __str__(self):
     return "{} {}".format(self.matricula, self.monthly_amount)
 
+class PaymentChoice(Enum):
+  MATRICULA = 0
+  MARZO = 1
+  ABRIL = 2
+  MAYO = 3
+  JUNIO = 4
+  JULIO = 5
+  AGOSTO = 6
+  SEPTIEMBRE = 7
+  OCTUBRE = 8
+  NOVIEMBRE = 9
+  DICIEMBRE = 10
+
 class Payment(models.Model):
   payment_date = models.DateField("Fecha de pago", default=timezone.now)
   receipt_nro = models.IntegerField("Numero de recibo")
   payment_settings = models.ForeignKey(PaymentSettings, on_delete=models.CASCADE)
+
   REF_CHOICES = (
           (0, "Matricula"),
           (1, "Marzo"),

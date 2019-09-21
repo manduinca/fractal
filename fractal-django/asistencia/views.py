@@ -34,6 +34,7 @@ from .logic import getFormatedSchedule
 from .logic import getReportForTeacher
 
 from billing.logic import getAdminReport
+from billing.models import Payment, PaymentSettings, PaymentChoice
 # Create your views here.
 
 # This is just for login and redirect properly
@@ -277,6 +278,25 @@ class UploadFileForm(LoginRequiredMixin, generic.FormView):
       return render(request, self.template_name, {'error_msg':"error"})
       #return self.form_invalid(form) 
 
+# TODO: this has some bussiness logic, move it somewhere else
+class PaymentsView(LoginRequiredMixin, generic.ListView):
+  login_url = 'login/'
+  redirect_field_name = 'redirect_to'
+  template_name = 'asistencia/payments.html'
+  def get(self, request, *args, **kwargs):
+    logger = logging.getLogger(__name__)
+    student = Student.objects.filter(apoderado__id=request.user.id).first()
+    matricula = Matricula.objects.filter(yearsettings_id=request.year_id,
+            student=student).first()
+    ps = PaymentSettings.objects.filter(matricula=matricula)
+    payments = []
+    for p in Payment.objects.filter(payment_settings=ps):
+        payments.append(PaymentChoice(p.pay_reference).name.capitalize())
+    return render(request, self.template_name, 
+            {
+              'payments' : payments,
+              'msg' : ''
+            })
 class GradingListView(LoginRequiredMixin, generic.ListView):
   login_url = 'login/'
   redirect_field_name = 'redirect_to'
