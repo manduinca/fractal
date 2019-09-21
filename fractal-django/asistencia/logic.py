@@ -506,10 +506,26 @@ def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, period
         grade["pm2"] = pm2["pm"]
         grade["pb"] = "-" if not pb else pb
         grade["bimonth"] = bimonth
-        # special case: for some reason they want 'religion' to have the same grade as 'computacion'
+        # special cases: for some reason they want 'religion' to have the same grade as 'computacion'
         if sub.name.lower() == "computacion":
           grades_for_student.append({
               "subject_name": "Religion",
+              "pm1"         : grade["pm1"],
+              "pm2"         : grade["pm2"],
+              "pb"          : grade["pb"],
+              "bimonth"     : grade["bimonth"]
+              })
+        elif sub.name.lower() == "computacion":
+          grades_for_student.append({
+              "subject_name": "Educacion para el Trabajo",
+              "pm1"         : grade["pm1"],
+              "pm2"         : grade["pm2"],
+              "pb"          : grade["pb"],
+              "bimonth"     : grade["bimonth"]
+              })
+        elif sub.name.lower() == "educacion fisica":
+          grades_for_student.append({
+              "subject_name": "Arte",
               "pm1"         : grade["pm1"],
               "pm2"         : grade["pm2"],
               "pb"          : grade["pb"],
