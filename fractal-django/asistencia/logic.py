@@ -475,6 +475,7 @@ def hourToRow( hour ):
 # TODO: this function should remove repeated rows, so the schedule 
 # is smaller (compressed) and looks better
 #def compressSchedule(schedule):
+
 def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, periods, bimonth, grading_info ):
   students = []
   grades_for_student = []
@@ -505,6 +506,15 @@ def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, period
         grade["pm2"] = pm2["pm"]
         grade["pb"] = "-" if not pb else pb
         grade["bimonth"] = bimonth
+        # special case: for some reason they want 'religion' to have the same grade as 'computacion'
+        if sub.name.lower() == "computacion":
+          grades_for_student.append({
+              "subject_name": "Religion",
+              "pm1"         : grade["pm1"],
+              "pm2"         : grade["pm2"],
+              "pb"          : grade["pb"],
+              "bimonth"     : grade["bimonth"]
+              })
         grades_for_student.append(grade)
       
   return class_info, students, grades_for_student
