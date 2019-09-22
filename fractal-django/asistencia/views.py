@@ -32,6 +32,7 @@ from .logic import getMonthlyGradesBySubjectForTeacher, saveMonthlyGradesForSubj
 from .logic import getBiMonthlyGradesForStudent, getBiMonthlyGradesByStudentForTeacher
 from .logic import getFormatedSchedule
 from .logic import getReportForTeacher
+from .logic import getIncidentsForTeacher, saveIncidentsForTeacher, deleteIncidentForTeacher
 
 from billing.logic import getAdminReport
 from billing.models import Payment, PaymentSettings, PaymentChoice
@@ -284,6 +285,8 @@ class PaymentsView(LoginRequiredMixin, generic.ListView):
   redirect_field_name = 'redirect_to'
   template_name = 'asistencia/payments.html'
   def get(self, request, *args, **kwargs):
+    if request.is_teacher:
+      return redirect ("grading_daily")
     logger = logging.getLogger(__name__)
     student = Student.objects.filter(apoderado__id=request.user.id).first()
     matricula = Matricula.objects.filter(yearsettings_id=request.year_id,
@@ -594,6 +597,76 @@ def getLibretas(request):
   p.showPage()
   p.save()
   return response
+
+class IncidentsView(LoginRequiredMixin, generic.ListView):
+  login_url = 'login/'
+  redirect_field_name = 'redirect_to'
+  template_name = 'asistencia/incidents.html'
+
+  http_method_names = ['get', 'post', 'put', 'delete']
+  def dispatch(self, *args, **kwargs):
+    method = self.request.POST.get('_method', '').lower()
+    #if method == 'put':
+    #  return self.put(*args, **kwargs)
+    if method == 'delete':
+      return self.delete(*args, **kwargs)
+    return super(IncidentsView, self).dispatch(*args, **kwargs)
+
+  def get(self, request, *args, **kwargs):
+    if request.is_student:
+      return redirect ("asistencias_list")
+    student_id = request.GET.get("student_id")
+    if not student_id:
+      student_id = -1
+    else:
+      student_id = int(student_id)
+    incidents, students = getIncidentsForTeacher(request.user.id, request.year_id, student_id, request.periods, request.bimonth)
+    return render(request, self.template_name, {
+        "students": students,
+        "incidents": incidents,
+        })
+
+  def post(self, request, *args, **kwargs):
+    if request.is_student:
+      return redirect ("asistencias_list")
+    logger = logging.getLogger(__name__)
+    student_id = request.GET.get("student_id")
+    if not student_id:
+      student_id = -1
+    else:
+      student_id = int(student_id)
+    active_student = saveIncidentsForTeacher(student_id,
+        request.POST.get("points"),
+        request.POST.get("date"),
+        request.POST.get("incident"))
+    incidents, students = getIncidentsForTeacher(request.user.id, request.year_id, student_id, request.periods, request.bimonth)
+    logger.error("active {}".format(active_student))
+    return render(request, self.template_name, {
+        'students': students,
+        'incidents' : incidents,
+        })
+
+  def delete(self, request, *args, **kwargs):
+    if request.is_student:
+      return redirect ("asistencias_list")
+    student_id = request.POST.get("student_id")
+    if not student_id:
+      student_id = -1
+    else:
+      student_id = int(student_id)
+    logger = logging.getLogger(__name__)
+    incident_id = request.POST.get("incident_id")
+    if not incident_id:
+      incident_id = -1
+    else:
+      incident_id = int(incident_id)
+    deleteIncidentForTeacher(incident_id)
+    incidents, students = getIncidentsForTeacher(request.user.id, request.year_id, student_id, request.periods, request.bimonth)
+    logger.error("incident deleted {} for student {}".format(incident_id, student_id))
+    return render(request, self.template_name, {
+        'students': students,
+        'incidents' : incidents,
+        })
 
 class BillingReport(LoginRequiredMixin, generic.ListView):
   login_url = 'login/'

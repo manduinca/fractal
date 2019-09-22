@@ -211,6 +211,19 @@ class Grade(models.Model):
   def __str__(self):
     return "{}".format(self.grade)
 
+class Incident(models.Model):
+  points = models.IntegerField(null=True, blank=True)
+  date = models.DateField("Fecha", default=timezone.now, null=True, blank=True)
+  incident = models.TextField()
+  student = models.ForeignKey(Student, on_delete=models.CASCADE)
+  class Meta:
+    verbose_name = "Incidente"
+    verbose_name_plural = "Incidentes"
+  def __unicode__(self):
+    return "{}".format(self.incident)
+  def __str__(self):
+    return "{}".format(self.incident)
+
 class Schedule(models.Model):
   grade = models.ForeignKey(Grado, on_delete=models.CASCADE)
   SECTION_CHOICES = (

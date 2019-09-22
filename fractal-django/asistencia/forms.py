@@ -12,3 +12,9 @@ class ApoderadoUserChangeForm(UserChangeForm):
     class Meta:
         model = ApoderadoUser
         fields = UserCreationForm.Meta.fields + ('dni',)
+
+class IncidentForm(forms.Form):
+    points = forms.IntegerField()
+    date = forms.DateField()
+    incident = forms.CharField(widget=forms.Textarea)
+    student = forms.CharField(widget=forms.HiddenInput)

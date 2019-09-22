@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
-from django.db.models import Avg
-from .models import Asistencia, ApoderadoUser, Student, Schedule, YearSettings, Tutor, Subject, Matricula, Grade, Teacher
+from django.db.models import Avg, Sum
+from .models import Asistencia, ApoderadoUser, Student, Schedule, YearSettings
+from .models import Tutor, Subject, Matricula, Grade, Teacher
+from .models import Incident
+
 import math, decimal
 import logging
 
@@ -498,6 +501,58 @@ def hourToRow( hour ):
 # TODO: this function should remove repeated rows, so the schedule 
 # is smaller (compressed) and looks better
 #def compressSchedule(schedule):
+def getIncidentsForTeacher( teacher_id, ys_id, student_id, periods, bimonth ):
+  students = []
+  incidents = []
+  tutor = Tutor.objects.get(teacher_id=teacher_id, year_id=ys_id)
+  for m in Matricula.objects.filter(seccion_id=tutor.seccion.id, yearsettings_id=ys_id):
+    s = Student.objects.get(id=m.student_id)
+    student = {}
+    student["student_name"] = "{} {}".format(s.first_name, s.last_name)
+    student["student_lastname_firstname"] = "{}, {}".format(s.last_name, s.first_name)
+    student["student_id"] = s.id
+    student["is_selected"] = False
+    students.append(student)
+    if student_id < 0:
+      student_id = s.id
+    if student_id == s.id:
+      student["is_selected"] = True
+      #request.date = date_obj.strftime("%Y-%m-%d")
+      for i in Incident.objects.filter(student=s).order_by('id'):
+        incident = {}
+        incidents.append({
+            "incident_id" : i.id,
+            "points":   i.points,
+            "date":     i.date.strftime("%Y-%m-%d"),
+            "incident": i.incident,
+            "student_id": i.student.id
+            })
+  return incidents, students
+  
+def saveIncidentsForTeacher( student_id, points, date, incident ):
+  i = Incident(student_id = student_id,
+          points = float(points),
+          date = date,
+          incident = incident)
+  i.save()
+  return student_id
+
+def deleteIncidentForTeacher(incident_id):
+  Incident.objects.filter(id=incident_id).delete()
+
+def getBiMonthlyConductGrade( student_id, periods, bimonth ):
+  logger = logging.getLogger(__name__)
+  start_date = periods[int(bimonth*2-1)-1]["start"]
+  end_date   = periods[int(bimonth*2)-1]["end"]
+  incidents = Incident.objects.filter(student_id=student_id,
+          date__gte=start_date,
+          date__lte=end_date)
+  logger.error(" incident: {}".format(incidents))
+  if incidents:
+    points = incidents.aggregate(total=Sum('points'))
+    return 20 - points['total']
+  else:
+    return 20
 
 def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, periods, bimonth, grading_info ):
   students = []
@@ -529,7 +584,7 @@ def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, period
         grade["pm2"] = pm2["pm"]
         grade["pb"] = "-" if not pb else pb
         grade["bimonth"] = bimonth
-        # special cases: for some reason they want 'religion' to have the same grade as 'computacion'
+        # special cases: for some reason 'religion' has the same grade as 'computacion'
         if sub.name.lower() == "computacion":
           grades_for_student.append({
               "subject_name": "Religion",
@@ -555,6 +610,12 @@ def getBiMonthlyGradesByStudentForTeacher( teacher_id, ys_id, student_id, period
               "bimonth"     : grade["bimonth"]
               })
         grades_for_student.append(grade)
+      # This is the conduct grade
+      grades_for_student.append({
+          "subject_name": "Conducta",
+          "pb": getBiMonthlyConductGrade(s.id, periods, bimonth)
+          })
+
       
   return class_info, students, grades_for_student
 
@@ -584,6 +645,13 @@ def getBiMonthlyGradesForStudent( apoderado_id, ys_id, periods, bimonth, grading
       grade["pb"] = "-" if not pb else pb
       grade["bimonth"] = bimonth
       grades.append(grade)
+    #TODO uncomment following lines to show conduct for the parents
+    #grades.append({
+    #    "subject_name": "Conducta",
+    #    "pm1" : "-",
+    #    "pm2" : "-",
+    #    "pb": getBiMonthlyConductGrade(s.id, periods, bimonth)
+    #    })
     student["grades"] = grades
     students_grades.append(student)
     #TODO: implement template for multiple students

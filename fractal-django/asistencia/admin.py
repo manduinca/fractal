@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from .forms import ApoderadoUserCreationForm, ApoderadoUserChangeForm
-from .models import ApoderadoUser, Teacher, Grado, Seccion, Subject, Student, Matricula, Asistencia, Grade, Schedule, YearSettings, Tutor
+from .models import ApoderadoUser, Teacher, Grado, Seccion, Subject, Student, Matricula, Asistencia, Grade, Schedule, YearSettings, Tutor, Incident
 # Register your models here.
 
 class AsistenciaAdmin(admin.ModelAdmin):
@@ -91,6 +91,10 @@ class ApoderadoUserAdmin2(admin.ModelAdmin):
     list_display = ( 'username', 'first_name', 'last_name', 'dni' )
     search_fields = [ 'username', ]
 
+class IncidentAdmin(admin.ModelAdmin):
+    list_display = ( 'points', 'date', 'incident', 'student' )
+    search_fields = [ 'student', ]
+
 admin.site.register(ApoderadoUser, ApoderadoUserAdmin2)
 #admin.site.register(ApoderadoUser)
 admin.site.register(Teacher, TeacherAdmin)
@@ -104,3 +108,4 @@ admin.site.register(Asistencia, AsistenciaAdmin)
 admin.site.register(Grade, GradeAdmin)
 #admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(YearSettings, YearSettingsAdmin)
+admin.site.register(Incident, IncidentAdmin)
