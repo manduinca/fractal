@@ -533,7 +533,7 @@ def getLibretas(request):
        { "area": "ccss",         "grade": 0, "subjects": [] }
     ]
   data = [ ]
-  for grade in grades_for_student:
+  for grade in sorted(grades_for_student, key=lambda k: k['subject_name']):
     if unidecode(grade["subject_name"].lower()).find("geometria") >= 0:
       grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("trigonometria") >= 0:
