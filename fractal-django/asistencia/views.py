@@ -526,47 +526,49 @@ def getLibretas(request):
   y = 640
   x_curso = 100
   x_grade = 250
-  grades = {
-      "matematica":   { "grade": 0, "subjects": [] },
-      "comunicacion": { "grade": 0, "subjects": [] }, 
-      "cta":          { "grade": 0, "subjects": [] }, 
-      "ccss":         { "grade": 0, "subjects": [] }
-    }
+  grades = [
+       { "area": "matematica",   "grade": 0, "subjects": [] },
+       { "area": "comunicacion", "grade": 0, "subjects": [] }, 
+       { "area": "cta",          "grade": 0, "subjects": [] }, 
+       { "area": "ccss",         "grade": 0, "subjects": [] }
+    ]
   data = [ ]
   for grade in grades_for_student:
     if unidecode(grade["subject_name"].lower()).find("geometria") >= 0:
-      grades["matematica"]["subjects"].append(grade)
+      grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("trigonometria") >= 0:
-      grades["matematica"]["subjects"].append(grade)
+      grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("algebra") >= 0:
-      grades["matematica"]["subjects"].append(grade)
+      grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("aritmetica") >= 0:
-      grades["matematica"]["subjects"].append(grade)
+      grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("razonamiento matem") >= 0:
-      grades["matematica"]["subjects"].append(grade)
+      grades[0]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("lenguaje") >= 0:
-      grades["comunicacion"]["subjects"].append(grade)
+      grades[1]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("literatura") >= 0:
-      grades["comunicacion"]["subjects"].append(grade)
+      grades[1]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("razonamiento verbal") >= 0:
-      grades["comunicacion"]["subjects"].append(grade)
+      grades[1]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("biolog") >= 0:
-      grades["cta"]["subjects"].append(grade)
+      grades[2]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("fisica") == 0: # >= could be confused with educacion fisica
-      grades["cta"]["subjects"].append(grade)
+      grades[2]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("quimica") >= 0:
-      grades["cta"]["subjects"].append(grade)
+      grades[2]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("historia") >= 0:
-      grades["ccss"]["subjects"].append(grade)
+      grades[3]["subjects"].append(grade)
     elif unidecode(grade["subject_name"].lower()).find("geografia") >= 0:
-      grades["ccss"]["subjects"].append(grade)
+      grades[3]["subjects"].append(grade)
     else:
-      grades[unidecode(grade["subject_name"].lower())] = { "grade": 0, "subjects": [ grade ] }
+      grades.append({ "area": unidecode(grade["subject_name"].lower()) ,  "grade": 0, "subjects": [ grade ] })
         
     #p.drawString(x_curso, y, grade["subject_name"])
     #p.drawString(x_grade, y, str(grade["pb"]))
     #y -= 20
-  for area,areas in grades.items():
+
+  # Computing average per area
+  for areas in grades:
     grade = 0
     for subject in areas["subjects"]:
       if subject["pb"] != "-":
@@ -574,13 +576,14 @@ def getLibretas(request):
     #FIXME:subjects["grade"] = roundUp(grade/len(area["subjects"]))
     areas["grade"] = round(grade/len(areas["subjects"]))
       
-  for area,areas in grades.items():
-    if unidecode(area).find("tutoria") >= 0:
+  # Printing in the PDF
+  for areas in grades:
+    if unidecode(areas["area"]).find("tutoria") >= 0:
       continue
     p.setFillColorRGB(0.125, 0.386, 0.6)
     p.rect(x_curso-5, y-5, 150, 20, stroke=0, fill=1)
     p.setFillColorRGB(0,0,0)
-    p.drawString(x_curso, y, area.capitalize())
+    p.drawString(x_curso, y, areas["area"].capitalize())
     p.setFillColorRGB(0.125, 0.386, 0.6)
     p.rect(x_grade-5, y-5, 40, 20, stroke=0, fill=1)
     p.setFillColorRGB(0,0,0)
