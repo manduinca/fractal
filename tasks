@@ -11,29 +11,11 @@ Development
 9. Improve the creation of users. It's too repetitive now (the password part specially)
 10. Fix migration mismatchs
 11. Add a field in the subject model to allow it NOT to have grades! (like tutoria)
+12. Split grading system from attendance system
 
-Observaciones:
-=============
-
-Reporte: Monto de deuda (verificar), dice matricula para todo. OK
-Agregar boton: lista de deudores, agregar monto de deuda a excel y a la web. OK
-Arreglar la fechas de vencimiento y de advertencia.OK
-Agregar filtros en el adminitrados.OK
-agregar campo para considerar el primer mes de pago. OK
-
-Por defecto setear el input del pago sea igual a la mensualidad. TOO MUCH WORK. VSF
-movimiento de estudiantes: de 2 a seleccion, de 4 a seleccion. VSF
-
-Luis tasks
-==========
-
-Protocolos comunes:
-HTTP: web
-HTTPS: web encriptado
-SSH: conexion remota a servidores
 politica de seguridad: rechazar todas las conexiones que no sean del puerto 80 (HTTP) y del puerto 443(HTTPS)
 knock: 5 23 61 => disponiliza conexiones por el puerto 22 (SSH) durante 30 segundos, luego lo vuelve a cerrar
-ssh: con contrasena o con key (llave)
+ssh: con contrasena o con key
 
 DevOps:
 1. Setup firewall, knock port and ssh only with key. Follow this: 
@@ -51,3 +33,4 @@ Development:
 1. Fix middleware.py when there's no YearSetting set
 2. Set date, period, week, bimonth and year to current if none is set
 3. Make tests
+
