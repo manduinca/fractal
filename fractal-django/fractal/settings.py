@@ -114,7 +114,7 @@ ROOT_URLCONF = 'fractal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['fractal/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -189,7 +189,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = '/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = '/'
 
 # Graph model tool
 # https://django-extensions.readthedocs.io/en/latest/graph_models.html
