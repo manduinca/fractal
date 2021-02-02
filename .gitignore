@@ -88,3 +88,10 @@ db.sqlite3-journal
 *.aux
 *.out
 *.pdf
+
+#venv
+.env
+.venv
+
+#IDEA
+.idea
